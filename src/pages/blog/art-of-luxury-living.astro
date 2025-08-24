@@ -1,0 +1,191 @@
+---
+import MainLayout from '../../layouts/MainLayout.astro';
+
+const post = {
+  title: "The Art of Luxury Living",
+  date: "March 20, 2025",
+  author: "Sophia Laurent",
+  category: "Lifestyle",
+  image: "/images/featured-luxury.jpg"
+};
+---
+
+<MainLayout title={post.title} description="Discover the principles of luxurious living and how to incorporate them into your everyday life.">
+  <!-- Article Hero -->
+  <div class="relative">
+    <div class="h-[60vh] w-full">
+      <img 
+        src={post.image} 
+        alt={post.title}
+        class="w-full h-full object-cover"
+        onerror="this.src='https://placehold.co/1200x600/F9F5EB/gold?text=Luxe+Blog';this.onerror='';"
+      />
+    </div>
+    <div class="absolute inset-0 bg-charcoal bg-opacity-30"></div>
+    <div class="absolute inset-0 flex items-center justify-center">
+      <div class="bg-white bg-opacity-90 p-8 md:p-12 max-w-2xl text-center">
+        <p class="text-gold mb-2">{post.category}</p>
+        <h1 class="mb-6">{post.title}</h1>
+        <p class="text-mocha">By {post.author} • {post.date}</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Article Content -->
+  <article class="py-16">
+    <div class="container-custom max-w-3xl">
+      <div class="prose prose-lg mx-auto">
+        <p class="lead font-serif text-xl">Luxury isn't merely about material possessions or opulent surroundings—it's a mindset, a way of living that emphasizes quality, intentionality, and refinement in every aspect of life. In this article, we explore the principles that define true luxury living and how you can incorporate them into your everyday experiences.</p>
+        
+        <div class="divider"></div>
+
+        <h2>Defining Modern Luxury</h2>
+        <p>The concept of luxury has evolved significantly over the years. While traditional notions focused predominantly on rarity, expense, and exclusivity, modern luxury emphasizes quality, craftsmanship, sustainability, and meaningful experiences. Today's luxury is less about displaying wealth and more about curating a life of intention, excellence, and personal significance.</p>
+
+        <p>What makes something truly luxurious now is the attention to detail, the story behind it, and how it enhances your life. A handcrafted item created by an artisan using time-honored techniques carries more authentic luxury than mass-produced goods, regardless of the price tag.</p>
+
+        <h2>The Principles of Luxury Living</h2>
+        <p>To embrace the art of luxury living, consider these foundational principles:</p>
+
+        <h3>Quality Over Quantity</h3>
+        <p>The cornerstone of luxury living is prioritizing quality in all aspects of life. This means investing in fewer, better things rather than accumulating many mediocre ones. From the clothes you wear to the food you eat and the furnishings in your home, choosing items of superior quality creates an elevated everyday experience.</p>
+
+        <h3>Intentional Curation</h3>
+        <p>Luxury living involves thoughtfully curating your environment, relationships, and experiences. This principle encourages discernment—filling your life only with things, people, and activities that bring genuine value and joy.</p>
+
+        <h3>Attention to Detail</h3>
+        <p>The difference between the ordinary and the extraordinary often lies in attention to small details. From proper table settings to perfectly maintained personal items, these nuances create a sense of refinement that defines luxury living.</p>
+
+        <h3>Personal Authenticity</h3>
+        <p>True luxury reflects your personal values and identity rather than following trends or seeking external validation. It's about creating a life that feels authentically luxurious to you, even if it differs from conventional definitions.</p>
+
+        <blockquote>
+          <p>"Luxury is in each detail." — Hubert de Givenchy</p>
+        </blockquote>
+
+        <h2>Incorporating Luxury into Everyday Life</h2>
+        <p>You don't need unlimited resources to incorporate elements of luxury living into your daily routine:</p>
+
+        <h3>Elevate Daily Rituals</h3>
+        <p>Transform mundane daily activities into meaningful rituals. This could mean upgrading your morning coffee experience with quality beans and beautiful vessels, setting the table properly even for solo meals, or creating a soothing bedtime routine with fine linens and calming scents.</p>
+
+        <h3>Invest in Key Pieces</h3>
+        <p>Rather than impulse-buying numerous items, save for and invest in key pieces of exceptional quality that you'll use and enjoy daily. A well-crafted piece of furniture, a professional-grade kitchen tool, or a timeless wardrobe staple can elevate your everyday experience.</p>
+
+        <h3>Create Sensory Harmony</h3>
+        <p>Luxury engages all the senses. Consider how your environment looks, feels, smells, sounds, and even tastes. Incorporate elements that please each sense—natural materials that feel good to touch, ambient music that soothes the mind, signature scents that create atmosphere.</p>
+
+        <h3>Embrace Slow Living</h3>
+        <p>Perhaps the ultimate luxury in our fast-paced world is time—the ability to slow down and fully engage with life's moments. Practice being present, savoring experiences, and resisting the constant pressure to rush.</p>
+
+        <h2>The Essence of Luxury</h2>
+        <p>Remember that true luxury isn't about ostentation or keeping up appearances—it's about enhancing your quality of life through thoughtful choices and appreciation for excellence. By embracing these principles, you can create a life that feels genuinely luxurious, regardless of budget or circumstance.</p>
+
+        <p>The art of luxury living, at its core, is about bringing intention, quality, and beauty into everyday moments. It's not about having more, but about making what you have more meaningful.</p>
+        
+        <div class="divider"></div>
+      </div>
+      
+      <!-- Author Bio -->
+      <div class="luxury-card p-8 mt-12 flex items-center">
+        <div class="w-20 h-20 rounded-full overflow-hidden mr-6">
+          <img 
+            src="/images/team-sophia.jpg" 
+            alt="Sophia Laurent" 
+            class="object-cover w-full h-full"
+            onerror="this.src='https://placehold.co/300x300/F9F5EB/gold?text=S';this.onerror='';"
+          />
+        </div>
+        <div>
+          <h3 class="text-xl font-serif mb-2">Sophia Laurent</h3>
+          <p class="text-mocha">Founder & Editor-in-Chief with a background in luxury publishing and a passion for timeless design. Sophia brings her expertise in refined living to every article she crafts.</p>
+        </div>
+      </div>
+      
+      <!-- Share -->
+      <div class="mt-12 text-center">
+        <h3 class="font-serif text-xl mb-4">Share This Article</h3>
+        <div class="flex justify-center space-x-4">
+          <a href="#" class="text-mocha hover:text-gold transition-colors">
+            <span class="sr-only">Pinterest</span>
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-instagram"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+          </a>
+          <a href="#" class="text-mocha hover:text-gold transition-colors">
+            <span class="sr-only">Twitter</span>
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-twitter"><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"></path></svg>
+          </a>
+          <a href="#" class="text-mocha hover:text-gold transition-colors">
+            <span class="sr-only">Facebook</span>
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-facebook"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </article>
+
+  <!-- Related Articles -->
+  <section class="py-16 bg-slate bg-opacity-30">
+    <div class="container-custom">
+      <div class="text-center mb-12">
+        <h2 class="mb-3">You May Also Enjoy</h2>
+        <div class="divider"></div>
+      </div>
+      
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <article class="luxury-card overflow-hidden group">
+          <div class="aspect-video overflow-hidden">
+            <img 
+              src="/images/minimalist-luxury.jpg" 
+              alt="Minimalist Luxury: Less is More" 
+              class="object-cover w-full h-full group-hover:scale-105 transition-transform duration-500"
+              onerror="this.src='https://placehold.co/600x400/F9F5EB/gold?text=Luxe+Blog';this.onerror='';"
+            />
+          </div>
+          <div class="p-6">
+            <h3 class="text-xl mb-3 font-serif group-hover:text-gold transition-colors">
+              <a href="/blog/minimalist-luxury">Minimalist Luxury: Less is More</a>
+            </h3>
+            <p class="text-mocha mb-4">How embracing minimalism can actually enhance your luxury experience.</p>
+            <a href="/blog/minimalist-luxury" class="text-gold font-medium hover:underline">Read Article</a>
+          </div>
+        </article>
+        
+        <article class="luxury-card overflow-hidden group">
+          <div class="aspect-video overflow-hidden">
+            <img 
+              src="/images/morning-routine.jpg" 
+              alt="The Perfect Morning Routine" 
+              class="object-cover w-full h-full group-hover:scale-105 transition-transform duration-500"
+              onerror="this.src='https://placehold.co/600x400/F9F5EB/gold?text=Luxe+Blog';this.onerror='';"
+            />
+          </div>
+          <div class="p-6">
+            <h3 class="text-xl mb-3 font-serif group-hover:text-gold transition-colors">
+              <a href="/blog/perfect-morning-routine">The Perfect Morning Routine</a>
+            </h3>
+            <p class="text-mocha mb-4">Start your day with intention and elegance using this curated morning routine.</p>
+            <a href="/blog/perfect-morning-routine" class="text-gold font-medium hover:underline">Read Article</a>
+          </div>
+        </article>
+        
+        <article class="luxury-card overflow-hidden group">
+          <div class="aspect-video overflow-hidden">
+            <img 
+              src="/images/timeless-design.jpg" 
+              alt="Essential Elements of Timeless Interior Design" 
+              class="object-cover w-full h-full group-hover:scale-105 transition-transform duration-500"
+              onerror="this.src='https://placehold.co/600x400/F9F5EB/gold?text=Luxe+Blog';this.onerror='';"
+            />
+          </div>
+          <div class="p-6">
+            <h3 class="text-xl mb-3 font-serif group-hover:text-gold transition-colors">
+              <a href="/blog/timeless-interior-design">Essential Elements of Timeless Interior Design</a>
+            </h3>
+            <p class="text-mocha mb-4">Principles and elements that create spaces with enduring elegance.</p>
+            <a href="/blog/timeless-interior-design" class="text-gold font-medium hover:underline">Read Article</a>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+</MainLayout>

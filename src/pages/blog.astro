@@ -1,0 +1,122 @@
+---
+import MainLayout from '../layouts/MainLayout.astro';
+import BlogCard from '../components/BlogCard.astro';
+
+// Mock data for blog posts
+const allPosts = [
+  {
+    title: "The Art of Luxury Living",
+    excerpt: "Discover the principles of luxurious living and how to incorporate them into your everyday life.",
+    date: "March 20, 2025",
+    author: "Sophia Laurent",
+    image: "/images/featured-luxury.jpg",
+    category: "Lifestyle",
+    slug: "/blog/art-of-luxury-living"
+  },
+  {
+    title: "Minimalist Luxury: Less is More",
+    excerpt: "How embracing minimalism can actually enhance your luxury experience.",
+    date: "March 18, 2025",
+    author: "Alexander Grey",
+    image: "/images/minimalist-luxury.jpg",
+    category: "Lifestyle",
+    slug: "/blog/minimalist-luxury"
+  },
+  {
+    title: "The Perfect Morning Routine",
+    excerpt: "Start your day with intention and elegance using this curated morning routine.",
+    date: "March 15, 2025",
+    author: "Emma Wilson",
+    image: "/images/morning-routine.jpg",
+    category: "Wellness",
+    slug: "/blog/perfect-morning-routine"
+  },
+  {
+    title: "Culinary Experiences Worth Traveling For",
+    excerpt: "Extraordinary dining destinations that combine exceptional food with unforgettable atmospheres.",
+    date: "March 10, 2025",
+    author: "James Mitchell",
+    image: "/images/culinary-experiences.jpg",
+    category: "Travel",
+    slug: "/blog/culinary-experiences"
+  },
+  {
+    title: "The Science of Quality Sleep",
+    excerpt: "How to create the perfect sleep environment for rejuvenation and wellness.",
+    date: "March 5, 2025",
+    author: "Dr. Claire Bennett",
+    image: "/images/quality-sleep.jpg",
+    category: "Wellness",
+    slug: "/blog/science-of-quality-sleep"
+  },
+  {
+    title: "Essential Elements of Timeless Interior Design",
+    excerpt: "Principles and elements that create spaces with enduring elegance.",
+    date: "February 28, 2025",
+    author: "Thomas Wright",
+    image: "/images/timeless-design.jpg",
+    category: "Design",
+    slug: "/blog/timeless-interior-design"
+  }
+];
+---
+
+<MainLayout title="Blog" description="Explore our collection of articles on luxury living, wellness, travel and design.">
+  <!-- Page Header -->
+  <section class="py-16 bg-rose">
+    <div class="container-custom text-center">
+      <h1 class="mb-4">The Journal</h1>
+      <div class="divider"></div>
+      <p class="max-w-2xl mx-auto text-lg">Explore our collection of thoughtfully crafted articles on luxury living, wellness, travel, and timeless design.</p>
+    </div>
+  </section>
+
+  <!-- Categories Filter -->
+  <section class="pt-12 pb-6">
+    <div class="container-custom">
+      <div class="flex flex-wrap justify-center gap-4">
+        <a href="/blog" class="px-6 py-2 bg-gold text-white rounded-sm">All</a>
+        <a href="/blog/category/lifestyle" class="px-6 py-2 border border-sand hover:border-gold hover:bg-sand transition-colors rounded-sm">Lifestyle</a>
+        <a href="/blog/category/travel" class="px-6 py-2 border border-sand hover:border-gold hover:bg-sand transition-colors rounded-sm">Travel</a>
+        <a href="/blog/category/wellness" class="px-6 py-2 border border-sand hover:border-gold hover:bg-sand transition-colors rounded-sm">Wellness</a>
+        <a href="/blog/category/design" class="px-6 py-2 border border-sand hover:border-gold hover:bg-sand transition-colors rounded-sm">Design</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Blog Grid -->
+  <section class="py-12">
+    <div class="container-custom">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {allPosts.map(post => (
+          <BlogCard post={post} />
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Pagination -->
+  <section class="py-12">
+    <div class="container-custom">
+      <div class="flex justify-center">
+        <nav class="inline-flex">
+          <a href="#" class="px-4 py-2 border border-sand hover:border-gold hover:bg-sand transition-colors rounded-l-sm">
+            Previous
+          </a>
+          <a href="#" class="px-4 py-2 bg-gold text-white border-gold">
+            1
+          </a>
+          <a href="#" class="px-4 py-2 border border-sand hover:border-gold hover:bg-sand transition-colors">
+            2
+          </a>
+          <a href="#" class="px-4 py-2 border border-sand hover:border-gold hover:bg-sand transition-colors">
+            3
+          </a>
+          <a href="#" class="px-4 py-2 border border-sand hover:border-gold hover:bg-sand transition-colors rounded-r-sm">
+            Next
+          </a>
+        </nav>
+      </div>
+    </div>
+  </section>
+</MainLayout>

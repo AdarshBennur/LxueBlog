@@ -1,0 +1,121 @@
+---
+import MainLayout from '../layouts/MainLayout.astro';
+---
+
+<MainLayout title="About" description="Learn about LuxeBlog, our story, mission and the team behind our luxury content platform.">
+  <!-- Page Header -->
+  <section class="py-16 bg-rose">
+    <div class="container-custom text-center">
+      <h1 class="mb-4">About LuxeBlog</h1>
+      <div class="divider"></div>
+      <p class="max-w-2xl mx-auto text-lg">A platform dedicated to the art of refined living and sophisticated content.</p>
+    </div>
+  </section>
+
+  <!-- Our Story -->
+  <section class="py-16">
+    <div class="container-custom max-w-4xl">
+      <div class="luxury-card p-12">
+        <h2 class="text-center mb-3">Our Story</h2>
+        <div class="divider"></div>
+        <p class="mb-6">LuxeBlog was founded with a simple yet profound vision: to create a digital sanctuary where elegance, quality, and thoughtfulness converge. In a world often defined by speed and volume, we choose to celebrate the beauty of careful curation and mindful creation.</p>
+        <p class="mb-6">Our platform was born from a desire to explore what truly constitutes luxury in modern living. We believe luxury isn't merely about possessions or expense—it's about intention, quality, and the pursuit of excellence in all aspects of life.</p>
+        <p>From our carefully crafted articles to the aesthetic details of our platform, every element of LuxeBlog is designed to provide an elevated experience that inspires and delights.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Our Mission -->
+  <section class="py-16 bg-slate bg-opacity-30">
+    <div class="container-custom">
+      <div class="text-center mb-12">
+        <h2 class="mb-3">Our Philosophy</h2>
+        <div class="divider"></div>
+      </div>
+      
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div class="luxury-card p-8 text-center">
+          <h3 class="text-xl mb-4">Timeless Quality</h3>
+          <p>We believe in creating content that stands the test of time—articles that remain relevant, insightful, and valuable regardless of trends.</p>
+        </div>
+        
+        <div class="luxury-card p-8 text-center">
+          <h3 class="text-xl mb-4">Thoughtful Curation</h3>
+          <p>Each piece of content is carefully selected and crafted with intention, ensuring every article adds genuine value to our readers' lives.</p>
+        </div>
+        
+        <div class="luxury-card p-8 text-center">
+          <h3 class="text-xl mb-4">Elegant Simplicity</h3>
+          <p>We embrace the power of refined simplicity—focusing on what truly matters and presenting it in the most elegant way possible.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Team Section -->
+  <section class="py-16">
+    <div class="container-custom">
+      <div class="text-center mb-12">
+        <h2 class="mb-3">Meet Our Team</h2>
+        <div class="divider"></div>
+        <p class="max-w-2xl mx-auto">The passionate individuals behind LuxeBlog who bring expertise and refined perspectives to our platform.</p>
+      </div>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div class="luxury-card p-8 text-center">
+          <div class="w-32 h-32 rounded-full overflow-hidden mx-auto mb-6">
+            <img 
+              src="/images/team-sophia.jpg" 
+              alt="Sophia Laurent" 
+              class="object-cover w-full h-full"
+              onerror="this.src='https://placehold.co/300x300/F9F5EB/gold?text=S';this.onerror='';"
+            />
+          </div>
+          <h3 class="text-xl mb-2">Sophia Laurent</h3>
+          <p class="text-gold mb-3">Founder & Editor-in-Chief</p>
+          <p class="text-mocha">With a background in luxury publishing and a passion for timeless design, Sophia brings vision and direction to LuxeBlog.</p>
+        </div>
+        
+        <div class="luxury-card p-8 text-center">
+          <div class="w-32 h-32 rounded-full overflow-hidden mx-auto mb-6">
+            <img 
+              src="/images/team-alexander.jpg" 
+              alt="Alexander Grey" 
+              class="object-cover w-full h-full"
+              onerror="this.src='https://placehold.co/300x300/F9F5EB/gold?text=A';this.onerror='';"
+            />
+          </div>
+          <h3 class="text-xl mb-2">Alexander Grey</h3>
+          <p class="text-gold mb-3">Lifestyle Editor</p>
+          <p class="text-mocha">Alexander's expertise in minimalism and intentional living informs our approach to modern luxury lifestyle content.</p>
+        </div>
+        
+        <div class="luxury-card p-8 text-center">
+          <div class="w-32 h-32 rounded-full overflow-hidden mx-auto mb-6">
+            <img 
+              src="/images/team-emma.jpg" 
+              alt="Emma Wilson" 
+              class="object-cover w-full h-full"
+              onerror="this.src='https://placehold.co/300x300/F9F5EB/gold?text=E';this.onerror='';"
+            />
+          </div>
+          <h3 class="text-xl mb-2">Emma Wilson</h3>
+          <p class="text-gold mb-3">Wellness Curator</p>
+          <p class="text-mocha">With certifications in holistic health and wellness, Emma brings authentic expertise to our wellness content.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Join Us CTA -->
+  <section class="py-16 bg-rose">
+    <div class="container-custom text-center">
+      <h2 class="mb-4">Join Our Journey</h2>
+      <p class="max-w-2xl mx-auto mb-8 text-lg">Connect with us and become part of a community that celebrates the art of refined living.</p>
+      <div class="flex flex-wrap justify-center gap-4">
+        <a href="/contact" class="btn btn-primary">Contact Us</a>
+        <a href="/blog" class="btn btn-secondary">Read Our Journal</a>
+      </div>
+    </div>
+  </section>
+</MainLayout>

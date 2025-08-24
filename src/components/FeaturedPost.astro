@@ -1,0 +1,41 @@
+---
+interface Post {
+  title: string;
+  excerpt: string;
+  date: string;
+  author: string;
+  image: string;
+  slug: string;
+}
+
+interface Props {
+  post: Post;
+}
+
+const { post } = Astro.props;
+---
+
+<article class="luxury-card overflow-hidden">
+  <div class="grid grid-cols-1 md:grid-cols-2">
+    <div class="relative aspect-square md:aspect-auto">
+      <img 
+        src={post.image} 
+        alt={post.title}
+        class="object-cover w-full h-full"
+        onerror="this.src='https://placehold.co/800x800/F9F5EB/gold?text=Luxe+Blog';this.onerror='';"
+      />
+    </div>
+    <div class="p-8 md:p-12 flex flex-col justify-center">
+      <div>
+        <p class="text-gold font-medium mb-3">{post.date} • By {post.author}</p>
+        <h3 class="text-2xl md:text-3xl mb-4 hover:text-gold transition-colors">
+          <a href={post.slug}>{post.title}</a>
+        </h3>
+        <p class="mb-6 text-mocha">{post.excerpt}</p>
+        <a href={post.slug} class="btn btn-secondary inline-block">
+          Read Article
+        </a>
+      </div>
+    </div>
+  </div>
+</article>
