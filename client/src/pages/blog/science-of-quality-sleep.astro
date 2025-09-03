@@ -1,0 +1,318 @@
+---
+import MainLayout from '../../layouts/MainLayout.astro';
+
+const post = {
+  title: "The Science of Quality Sleep",
+  date: "March 5, 2025",
+  author: "Dr. Claire Bennett",
+  category: "Wellness",
+  image: "https://images.unsplash.com/photo-1541781774459-bb2af2f05b55?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80"
+};
+---
+
+<MainLayout title={post.title} description="How to create the perfect sleep environment for rejuvenation and wellness.">
+  <!-- Article Hero -->
+  <div class="relative">
+    <div class="h-[60vh] w-full">
+      <img 
+        src={post.image} 
+        alt={post.title}
+        class="w-full h-full object-cover"
+        onerror="this.src='https://placehold.co/1200x600/F9F5EB/gold?text=Luxe+Blog';this.onerror='';"
+      />
+    </div>
+    <div class="absolute inset-0 bg-charcoal bg-opacity-30"></div>
+    <div class="absolute inset-0 flex items-center justify-center">
+      <div class="bg-white bg-opacity-90 p-8 md:p-12 max-w-2xl text-center">
+        <p class="text-gold mb-2">{post.category}</p>
+        <h1 class="mb-6">{post.title}</h1>
+        <p class="text-mocha">By {post.author} • {post.date}</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Article Content -->
+  <article class="py-16">
+    <div class="container-custom max-w-3xl">
+      <div class="prose prose-lg mx-auto">
+        <p class="lead font-serif text-xl">In our pursuit of wellness and optimal living, sleep remains the foundation upon which all other health practices rest. Yet in today's hyperconnected world, truly restorative sleep has become increasingly elusive. This article explores the science behind quality sleep and offers evidence-based strategies for creating a sleep sanctuary that supports your body's natural regenerative processes.</p>
+        
+        <div class="divider"></div>
+
+        <h2>The Architecture of Sleep</h2>
+        <p>Sleep is not a uniform state but rather a complex, dynamic process consisting of multiple stages, each serving distinct biological functions. Understanding this architecture is the first step toward optimizing your sleep experience.</p>
+
+        <p>A complete sleep cycle moves through four distinct stages: three stages of non-REM (rapid eye movement) sleep, followed by REM sleep. These cycles repeat throughout the night, with each full cycle lasting approximately 90-110 minutes. Most adults need 4-6 complete cycles per night for optimal functioning.</p>
+
+        <h3>Stage 1: Light Sleep Transition</h3>
+        <p>This brief transition phase (typically lasting only 1-5 minutes) bridges wakefulness and sleep. During this stage, your brain activity begins to slow, your muscles relax, and you may experience brief hypnic jerks—sudden muscle contractions that sometimes accompany the sensation of falling. While easily disrupted, this stage serves as a necessary gateway to deeper sleep states.</p>
+
+        <h3>Stage 2: Neural Maintenance</h3>
+        <p>Accounting for approximately 50% of total sleep time, Stage 2 features further slowing of brain activity punctuated by brief bursts of electrical activity called sleep spindles. These spindles play a crucial role in memory consolidation and information processing. Your body temperature drops, heart rate slows, and the environment must remain conducive to sleep to prevent awakening.</p>
+
+        <h3>Stage 3: Deep Restorative Sleep</h3>
+        <p>Often called delta sleep or slow-wave sleep due to the characteristic delta waves produced by the brain, this stage is when the body conducts its most intensive physical restoration. Growth hormone is released, tissues repair, immune function strengthens, and metabolic waste is cleared from the brain through the recently discovered glymphatic system. Most deep sleep occurs during the first half of the night, making those early sleep hours particularly valuable.</p>
+
+        <h3>REM Sleep: Cognitive Processing</h3>
+        <p>The final stage in each cycle, REM sleep, is characterized by rapid eye movements, increased brain activity (similar to wakefulness), temporary muscle paralysis, and vivid dreaming. This stage is essential for emotional regulation, creative problem-solving, and consolidation of procedural memory. REM periods lengthen as the night progresses, with the longest episodes occurring in the final hours before natural awakening.</p>
+
+        <blockquote>
+          <p>"Sleep is the golden chain that ties health and our bodies together." — Thomas Dekker</p>
+        </blockquote>
+
+        <h2>The Biological Imperatives of Quality Sleep</h2>
+        <p>Far from being a passive state, sleep actively supports numerous biological processes essential to optimal functioning and longevity. Recent advances in sleep science have revealed just how fundamentally sleep impacts virtually every aspect of human health:</p>
+
+        <h3>Cognitive Architecture</h3>
+        <p>During sleep, particularly deep and REM stages, the brain consolidates memories, processes emotional experiences, and clears metabolic waste products. The glymphatic system—a recently discovered brain cleansing mechanism—becomes up to 10 times more active during deep sleep, flushing out proteins like beta-amyloid that are associated with neurodegenerative diseases when allowed to accumulate.</p>
+
+        <p>Research from the University of California, Berkeley has demonstrated that even a single night of insufficient sleep can reduce hippocampal function by up to 40%, significantly impairing the ability to form new memories. Conversely, adequate REM sleep enhances creative problem-solving abilities and emotional intelligence.</p>
+
+        <h3>Metabolic Regulation</h3>
+        <p>Sleep duration and quality directly impact metabolic health through multiple mechanisms. A landmark study published in the Annals of Internal Medicine found that insufficient sleep alters the body's handling of glucose, reducing insulin sensitivity by 30% after just four days of sleep restriction. This insulin resistance resembles pre-diabetic states and promotes fat storage, particularly in visceral areas associated with cardiovascular risk.</p>
+
+        <p>Sleep also regulates the hormones ghrelin and leptin, which control hunger and satiety signals. Sleep deprivation increases ghrelin (the "hunger hormone") while decreasing leptin (the "satiety hormone"), creating a biological drive toward increased caloric consumption and preference for energy-dense foods.</p>
+
+        <h3>Immune Function</h3>
+        <p>The relationship between sleep and immune function is bidirectional and profound. During sleep, particularly slow-wave stages, the body produces and releases cytokines—proteins that target infection and inflammation. Specific immune cells, including T cells and natural killer cells, are also produced and optimized during deep sleep phases.</p>
+
+        <p>Research from the University of Tübingen in Germany has shown that even a modest sleep restriction of two hours per night for just one week can reduce natural killer cell activity by up to 70%, significantly compromising the body's ability to identify and eliminate potentially harmful cells.</p>
+
+        <h3>Cellular Restoration</h3>
+        <p>At the cellular level, sleep facilitates essential maintenance processes. Growth hormone, released predominantly during deep sleep, stimulates tissue repair and cellular regeneration. Simultaneously, various antioxidant pathways become more active, combating oxidative stress accumulated during waking hours.</p>
+
+        <p>Recent research has also revealed that sleep plays a crucial role in maintaining telomere length—the protective caps on chromosomes that shorten with age and stress. Chronic sleep deprivation accelerates telomere shortening, potentially contributing to premature cellular aging and associated health risks.</p>
+
+        <h2>Engineering the Optimal Sleep Environment</h2>
+        <p>Creating conditions conducive to quality sleep requires attention to multiple environmental factors, each supported by substantial scientific evidence:</p>
+
+        <h3>Temperature Regulation</h3>
+        <p>Core body temperature naturally decreases by 1-2°F during the onset of sleep, signaling the brain that it's time to transition to a sleep state. Research from the Center for Chronobiology at the University of Basel has identified the optimal ambient temperature for sleep to be between 60-67°F (15.5-19.4°C) for most individuals.</p>
+
+        <p>Beyond ambient temperature, the microclimate created by bedding plays a crucial role. Materials with effective thermoregulatory properties—such as natural fibers that wick moisture and allow heat dissipation—can prevent the disruptive temperature fluctuations that fragment sleep architecture.</p>
+
+        <p>Consider investing in:</p>
+        <ul>
+          <li>Bedding with phase-change materials that absorb excess heat when you're too warm and release it when you cool down</li>
+          <li>Split tog duvets for couples with different temperature preferences</li>
+          <li>Climate control systems that gradually lower bedroom temperature in the evening and raise it slightly before morning awakening</li>
+        </ul>
+
+        <h3>Light Management</h3>
+        <p>Light exposure is the primary environmental factor regulating circadian rhythms. Even modest ambient light during sleep has been shown to suppress melatonin production and disrupt sleep architecture. A study from Northwestern University found that exposure to just 100 lux of light (equivalent to a dimly lit room) during sleep reduced slow-wave and REM sleep while increasing nighttime awakenings.</p>
+
+        <p>More concerning, research published in PNAS demonstrated that sleeping with even dim light increased insulin resistance and oxidative stress the following morning, suggesting metabolic disruption occurs even when subjective sleep quality seems unaffected.</p>
+
+        <p>Optimal light management includes:</p>
+        <ul>
+          <li>Blackout window treatments that eliminate external light sources</li>
+          <li>Removal or covering of electronics with LED indicators</li>
+          <li>Red-spectrum lighting for any necessary nighttime illumination, as this wavelength minimally impacts melatonin production</li>
+          <li>Strategic daytime bright light exposure to reinforce circadian rhythms</li>
+        </ul>
+
+        <h3>Acoustic Environment</h3>
+        <p>The sleeping brain remains remarkably responsive to auditory stimuli, particularly during lighter sleep stages. Research from Harvard Medical School has shown that even sounds that don't fully wake you can cause harmful microarousals that fragment sleep architecture and prevent deeper, more restorative stages.</p>
+
+        <p>The acoustic profile of an optimal sleep environment includes:</p>
+        <ul>
+          <li>Sound attenuation through architectural elements like solid-core doors, acoustic panels, or specialized window treatments</li>
+          <li>Consistent background sound (pink or brown noise rather than white noise) to mask unpredictable environmental noises</li>
+          <li>Consideration of sound frequency profiles—lower frequency sounds (below 500 Hz) are more disruptive to sleep architecture than higher frequencies</li>
+        </ul>
+
+        <h3>Air Quality</h3>
+        <p>The composition of the air we breathe during sleep significantly impacts respiratory function and sleep quality. Research from the Harvard T.H. Chan School of Public Health found that improved ventilation and reduced CO2 levels correlated with better sleep efficiency and next-day cognitive performance.</p>
+
+        <p>Key considerations for sleep-optimized air include:</p>
+        <ul>
+          <li>Maintaining bedroom CO2 levels below 1,000 ppm through adequate ventilation</li>
+          <li>Optimal humidity between 40-60% to support respiratory health and prevent irritation</li>
+          <li>Filtration of particulate matter and allergens that may trigger inflammatory responses</li>
+          <li>Consideration of VOC-free materials in bedroom furnishings to eliminate off-gassing of potentially disruptive compounds</li>
+        </ul>
+
+        <h3>Electromagnetic Environment</h3>
+        <p>While research on electromagnetic fields (EMFs) and sleep remains evolving, some studies suggest that exposure to certain frequencies may influence melatonin production and sleep architecture. A prudent approach includes:</p>
+        <ul>
+          <li>Creating a device-free zone in the bedroom, particularly eliminating screens and wireless devices near the head during sleep</li>
+          <li>Using airplane mode for any necessary devices kept in the bedroom</li>
+          <li>Considering the placement of electrical equipment relative to the bed</li>
+        </ul>
+
+        <h2>The Luxury of Materiality: Selecting Sleep Surfaces and Textiles</h2>
+        <p>The surfaces and textiles with which we interact during sleep represent perhaps the most direct environmental influence on sleep quality. These elements merit particular attention:</p>
+
+        <h3>Mattress Technology</h3>
+        <p>The ideal sleep surface provides optimal pressure distribution, spinal alignment, motion isolation, and temperature regulation. Rather than prescribing a universal "best" mattress type, sleep science suggests matching mattress characteristics to individual needs:</p>
+
+        <p>For those with joint sensitivity or side sleeping preferences, adaptive surfaces that provide targeted pressure relief around the shoulders and hips while maintaining lumbar support show superior outcomes in polysomnography studies. Materials like high-resilience foams or micro-coil systems with zoned support often excel in this category.</p>
+
+        <p>For those who sleep warm, mattress technologies with active cooling properties—such as open-cell structures, graphite or copper infusions, or phase-change materials—can help maintain the optimal temperature gradient for sleep onset and maintenance.</p>
+
+        <p>Beyond the mattress itself, consideration should be given to the foundation system. Research from the Sleep Research Society has shown that even high-quality mattresses perform suboptimally when placed on incompatible foundations that don't allow proper function of the mattress's design elements.</p>
+
+        <h3>Textile Considerations</h3>
+        <p>The textiles that contact the skin during sleep influence both thermoregulation and tactile comfort. Natural fibers generally outperform synthetics in moisture management and temperature regulation:</p>
+
+        <ul>
+          <li>Long-staple cotton with counts between 300-500 threads per square inch balances durability with breathability</li>
+          <li>Linen, while initially crisp, softens with use and offers superior moisture-wicking for those prone to night sweats</li>
+          <li>Silk provides exceptional temperature adaptability and reduces friction against skin and hair, though requires more delicate care</li>
+          <li>Wool, contrary to common perception, functions well year-round due to its remarkable temperature regulation and moisture management properties</li>
+        </ul>
+
+        <p>Thread count, while often marketed as the primary quality indicator, matters less than fiber quality, weave structure, and finishing techniques. A moderate thread count using superior fibers generally outperforms extremely high thread counts made with inferior materials.</p>
+
+        <h2>Chronobiology: Timing Your Sleep</h2>
+        <p>Beyond the physical environment, the timing of sleep profoundly influences its quality and restorative power. The field of chronobiology—the study of biological rhythms—offers important insights:</p>
+
+        <h3>Circadian Alignment</h3>
+        <p>Each individual possesses a genetically influenced chronotype that affects optimal sleep timing. Research from the University of Munich has identified specific polymorphisms in clock genes (PER1, PER2, and CLOCK) that create a spectrum of chronotypes from extreme "larks" (morning types) to extreme "owls" (evening types).</p>
+
+        <p>Rather than forcing conformity to an arbitrary schedule, aligning sleep timing with your biological chronotype improves sleep efficiency, duration of restorative stages, and daytime functioning. Chronotype assessment tools can help identify your optimal sleep window.</p>
+
+        <h3>Consistency and Social Jetlag</h3>
+        <p>Regardless of chronotype, consistency in sleep timing strengthens circadian signals and improves sleep quality. "Social jetlag"—the discrepancy between biological sleep timing and socially imposed schedules—has been linked to metabolic dysfunction, mood disorders, and increased cardiovascular risk.</p>
+
+        <p>When schedule variations are unavoidable, minimizing the difference between weekday and weekend timing helps maintain circadian stability. If schedule shifts are necessary, gradual transitions of 15-30 minutes per day are more easily accommodated by the circadian system than abrupt changes.</p>
+
+        <h2>Nutritional and Behavioral Influences</h2>
+        <p>What we consume and how we behave in the hours preceding sleep significantly impacts sleep architecture:</p>
+
+        <h3>Strategic Nutrition</h3>
+        <p>Certain nutritional choices can biochemically support optimal sleep:</p>
+        <ul>
+          <li>Foods containing natural melatonin precursors (tryptophan, found in turkey, eggs, and dairy) consumed 3-4 hours before bedtime can support natural melatonin production</li>
+          <li>Magnesium-rich foods (dark leafy greens, nuts, seeds) support GABA production, the primary inhibitory neurotransmitter that enables the transition to sleep</li>
+          <li>Glycemic considerations: moderate-glycemic meals 3-4 hours before sleep help stabilize blood sugar throughout the night, preventing the cortisol spikes associated with nocturnal hypoglycemia</li>
+        </ul>
+
+        <h3>Pre-Sleep Rituals</h3>
+        <p>The transition from wakefulness to sleep benefits from consistent signaling to the nervous system:</p>
+        <ul>
+          <li>Temperature manipulation: a warm bath or shower 60-90 minutes before bed triggers a compensatory drop in core temperature that facilitates sleep onset</li>
+          <li>Light attenuation: systematic reduction in environmental light, particularly blue wavelengths, signals melatonin production</li>
+          <li>Cognitive wind-down: transitioning from analytical to relaxing activities reduces cortical activation and prepares the mind for sleep</li>
+        </ul>
+
+        <h2>Personalization: The Future of Sleep Science</h2>
+        <p>Perhaps the most significant development in sleep science is the recognition that optimal sleep is highly individualized. Factors including age, genetics, medical conditions, and personal preferences all influence what constitutes ideal sleep for each person.</p>
+
+        <p>Advanced sleep tracking technologies now allow for personalized insights beyond basic duration metrics. Variables such as heart rate variability, respiratory rate, body temperature fluctuations, and movement patterns can be analyzed to identify individual-specific factors that enhance or detract from restorative sleep.</p>
+
+        <p>This personalized approach represents the intersection of luxury and science—the ability to precisely calibrate your sleep environment and practices to your unique physiological needs rather than following generalized recommendations.</p>
+
+        <h2>The Ultimate Luxury: Prioritizing Sleep</h2>
+        <p>In a culture that often glorifies busyness and minimal sleep, perhaps the ultimate luxury is the willingness to prioritize this fundamental biological need. Quality sleep is not merely absence of wakefulness but an active, complex process essential to physical health, cognitive function, emotional regulation, and subjective well-being.</p>
+
+        <p>By understanding the science of sleep and thoughtfully engineering your sleep environment, you create the conditions for your body's natural restorative processes to function optimally. This investment—in knowledge, appropriate materials, and consistent practices—yields returns in virtually every aspect of health and performance.</p>
+
+        <p>In the words of sleep scientist Matthew Walker, "Sleep is the single most effective thing we can do to reset our brain and body health each day." In this light, creating the conditions for optimal sleep may be the most significant wellness practice available to us—a truly essential luxury.</p>
+        
+        <div class="divider"></div>
+      </div>
+      
+      <!-- Author Bio -->
+      <div class="luxury-card p-8 mt-12 flex items-center">
+        <div class="w-20 h-20 rounded-full overflow-hidden mr-6">
+          <img 
+            src="/images/team-claire.jpg" 
+            alt="Dr. Claire Bennett" 
+            class="object-cover w-full h-full"
+            onerror="this.src='https://placehold.co/300x300/F9F5EB/gold?text=C';this.onerror='';"
+          />
+        </div>
+        <div>
+          <h3 class="text-xl font-serif mb-2">Dr. Claire Bennett</h3>
+          <p class="text-mocha">Neuroscientist and sleep researcher with a focus on the relationship between sleep quality and cognitive performance. Dr. Bennett holds a Ph.D. in Neuroscience from Stanford University and has published extensively on chronobiology and sleep optimization.</p>
+        </div>
+      </div>
+      
+      <!-- Share -->
+      <div class="mt-12 text-center">
+        <h3 class="font-serif text-xl mb-4">Share This Article</h3>
+        <div class="flex justify-center space-x-4">
+          <a href="#" class="text-mocha hover:text-gold transition-colors">
+            <span class="sr-only">Pinterest</span>
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-instagram"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+          </a>
+          <a href="#" class="text-mocha hover:text-gold transition-colors">
+            <span class="sr-only">Twitter</span>
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-twitter"><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"></path></svg>
+          </a>
+          <a href="#" class="text-mocha hover:text-gold transition-colors">
+            <span class="sr-only">Facebook</span>
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-facebook"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </article>
+
+  <!-- Related Articles -->
+  <section class="py-16 bg-slate bg-opacity-30">
+    <div class="container-custom">
+      <div class="text-center mb-12">
+        <h2 class="mb-3">You May Also Enjoy</h2>
+        <div class="divider"></div>
+      </div>
+      
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <article class="luxury-card overflow-hidden group">
+          <div class="aspect-video overflow-hidden">
+            <img 
+              src="https://images.unsplash.com/photo-1545205597-3d9d02c29597?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80" 
+              alt="The Perfect Morning Routine" 
+              class="object-cover w-full h-full group-hover:scale-105 transition-transform duration-500"
+              onerror="this.src='https://placehold.co/600x400/F9F5EB/gold?text=Luxe+Blog';this.onerror='';"
+            />
+          </div>
+          <div class="p-6">
+            <h3 class="text-xl mb-3 font-serif group-hover:text-gold transition-colors">
+              <a href="/blog/perfect-morning-routine">The Perfect Morning Routine</a>
+            </h3>
+            <p class="text-mocha mb-4">Start your day with intention and elegance using this curated morning routine.</p>
+            <a href="/blog/perfect-morning-routine" class="text-gold font-medium hover:underline">Read Article</a>
+          </div>
+        </article>
+        
+        <article class="luxury-card overflow-hidden group">
+          <div class="aspect-video overflow-hidden">
+            <img 
+              src="https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80" 
+              alt="The Art of Luxury Living" 
+              class="object-cover w-full h-full group-hover:scale-105 transition-transform duration-500"
+              onerror="this.src='https://placehold.co/600x400/F9F5EB/gold?text=Luxe+Blog';this.onerror='';"
+            />
+          </div>
+          <div class="p-6">
+            <h3 class="text-xl mb-3 font-serif group-hover:text-gold transition-colors">
+              <a href="/blog/art-of-luxury-living">The Art of Luxury Living</a>
+            </h3>
+            <p class="text-mocha mb-4">Discover the principles of luxurious living and how to incorporate them into your everyday life.</p>
+            <a href="/blog/art-of-luxury-living" class="text-gold font-medium hover:underline">Read Article</a>
+          </div>
+        </article>
+        
+        <article class="luxury-card overflow-hidden group">
+          <div class="aspect-video overflow-hidden">
+            <img 
+              src="https://images.unsplash.com/photo-1596394516093-501ba68a0ba6?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80" 
+              alt="Culinary Experiences Worth Traveling For" 
+              class="object-cover w-full h-full group-hover:scale-105 transition-transform duration-500"
+              onerror="this.src='https://placehold.co/600x400/F9F5EB/gold?text=Luxe+Blog';this.onerror='';"
+            />
+          </div>
+          <div class="p-6">
+            <h3 class="text-xl mb-3 font-serif group-hover:text-gold transition-colors">
+              <a href="/blog/culinary-experiences">Culinary Experiences Worth Traveling For</a>
+            </h3>
+            <p class="text-mocha mb-4">Extraordinary dining destinations that combine exceptional food with unforgettable atmospheres.</p>
+            <a href="/blog/culinary-experiences" class="text-gold font-medium hover:underline">Read Article</a>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+</MainLayout>

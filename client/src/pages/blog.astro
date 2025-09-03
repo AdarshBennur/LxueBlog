@@ -1,0 +1,1186 @@
+---
+import MainLayout from '../layouts/MainLayout.astro';
+import BlogCard from '../components/BlogCard.astro';
+
+// Default blog posts data
+const defaultPosts = [
+  {
+    title: "The Art of Luxury Living",
+    excerpt: "Discover the principles of luxurious living and how to incorporate them into your everyday life.",
+    date: "March 20, 2025",
+    author: "Sophia Laurent",
+    image: "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80",
+    category: "Lifestyle",
+    slug: "/blog/art-of-luxury-living"
+  },
+  {
+    title: "Minimalist Luxury: Less is More",
+    excerpt: "How embracing minimalism can actually enhance your luxury experience.",
+    date: "March 18, 2025",
+    author: "Alexander Grey",
+    image: "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80",
+    category: "Lifestyle",
+    slug: "/blog/minimalist-luxury"
+  },
+  {
+    title: "The Perfect Morning Routine",
+    excerpt: "Start your day with intention and elegance using this curated morning routine.",
+    date: "March 15, 2025",
+    author: "Emma Wilson",
+    image: "https://images.unsplash.com/photo-1545205597-3d9d02c29597?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80",
+    category: "Wellness",
+    slug: "/blog/perfect-morning-routine"
+  },
+  {
+    title: "Culinary Experiences Worth Traveling For",
+    excerpt: "Extraordinary dining destinations that combine exceptional food with unforgettable atmospheres.",
+    date: "March 10, 2025",
+    author: "James Mitchell",
+    image: "https://images.unsplash.com/photo-1596394516093-501ba68a0ba6?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80",
+    category: "Travel",
+    slug: "/blog/culinary-experiences"
+  },
+  {
+    title: "The Science of Quality Sleep",
+    excerpt: "How to create the perfect sleep environment for rejuvenation and wellness.",
+    date: "March 5, 2025",
+    author: "Dr. Claire Bennett",
+    image: "https://images.unsplash.com/photo-1541781774459-bb2af2f05b55?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80",
+    category: "Wellness",
+    slug: "/blog/science-of-quality-sleep"
+  },
+  {
+    title: "Essential Elements of Timeless Interior Design",
+    excerpt: "Principles and elements that create spaces with enduring elegance.",
+    date: "February 28, 2025",
+    author: "Thomas Wright",
+    image: "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80",
+    category: "Design",
+    slug: "/blog/timeless-interior-design"
+  }
+];
+
+// Function to get all posts (combining default posts with user-created posts)
+function getAllPosts() {
+  // In a server environment, this would be handled differently
+  // For client-side rendering in Astro, we'll use an empty array initially
+  // and load from localStorage in the client script
+  return defaultPosts;
+}
+
+// Get all posts for initial server-side rendering
+const allPosts = getAllPosts();
+---
+
+<MainLayout title="Blog" description="Explore our collection of articles on luxury living, wellness, travel and design." currentPage="blog">
+  <!-- Page Header -->
+  <section class="py-16 bg-rose">
+    <div class="container-custom text-center">
+      <h1 class="mb-4">The Journal</h1>
+      <div class="divider"></div>
+      <p class="max-w-2xl mx-auto text-lg">Explore our collection of thoughtfully crafted articles on luxury living, wellness, travel, and timeless design.</p>
+    </div>
+  </section>
+  
+  <!-- Floating Action Button (FAB) -->
+  <div id="fabContainer" class="fixed bottom-8 right-8 z-50">
+    <button 
+      id="postArticleFab" 
+      class="w-14 h-14 bg-gold hover:bg-gold/90 text-white rounded-full shadow-lg flex items-center justify-center transition-all duration-300 hover:scale-105 hover:shadow-xl"
+      aria-label="Post Article"
+      title="Post Article"
+    >
+      <svg class="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+      </svg>
+      <span class="sr-only">Post Article</span>
+    </button>
+    <div id="fabTooltip" class="absolute right-16 top-1/2 -translate-y-1/2 bg-charcoal text-white text-sm py-1 px-3 rounded opacity-0 pointer-events-none transition-opacity duration-300">
+      Post Article
+    </div>
+  </div>
+
+  <!-- Categories Filter -->
+  <section class="pt-12 pb-6">
+    <div class="container-custom">
+      <div class="flex flex-wrap justify-center gap-4" id="categoryFilters">
+        <button data-category="all" class="filter-btn px-6 py-2 bg-gold text-white rounded-sm active">All</button>
+        <button data-category="lifestyle" class="filter-btn px-6 py-2 border border-sand hover:border-gold hover:bg-sand transition-colors rounded-sm">Lifestyle</button>
+        <button data-category="travel" class="filter-btn px-6 py-2 border border-sand hover:border-gold hover:bg-sand transition-colors rounded-sm">Travel</button>
+        <button data-category="wellness" class="filter-btn px-6 py-2 border border-sand hover:border-gold hover:bg-sand transition-colors rounded-sm">Wellness</button>
+        <button data-category="design" class="filter-btn px-6 py-2 border border-sand hover:border-gold hover:bg-sand transition-colors rounded-sm">Design</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Blog Grid -->
+  <section class="py-12">
+    <div class="container-custom">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="blogGrid">
+        {allPosts.map(post => (
+          <div data-category={post.category.toLowerCase()} class="blog-article">
+            <BlogCard post={post} />
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Dynamic Pagination -->
+  <section class="py-12" id="paginationSection">
+    <div class="container-custom">
+      <div class="flex justify-center">
+        <nav class="inline-flex" id="paginationNav">
+          <!-- Pagination buttons will be generated dynamically -->
+        </nav>
+      </div>
+    </div>
+  </section>
+  
+  <!-- Post Article Modal -->
+  <div id="postArticleModal" class="fixed inset-0 bg-charcoal/70 backdrop-blur-sm flex items-center justify-center z-50 opacity-0 pointer-events-none transition-opacity duration-300">
+    <div class="bg-white rounded-lg shadow-xl w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col">
+      <!-- Modal Header -->
+      <div class="bg-sand/20 px-6 py-4 border-b border-sand/30 flex justify-between items-center">
+        <h3 class="text-xl font-serif text-charcoal">Post a New Article</h3>
+        <button id="closeModalBtn" class="text-mocha/60 hover:text-mocha transition-colors">
+          <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+      
+      <!-- Modal Body -->
+      <div class="p-6 overflow-y-auto flex-grow">
+        <form id="postArticleForm" class="space-y-6">
+          <!-- Image Upload -->
+          <div>
+            <label class="block text-charcoal font-medium mb-2">Article Image</label>
+            <div id="imageUploadContainer" class="border-2 border-dashed border-sand/50 rounded-lg p-4 text-center">
+              <div id="imagePreviewContainer" class="hidden mb-4">
+                <img id="imagePreview" class="max-h-60 mx-auto object-contain" src="" alt="Article preview" />
+              </div>
+              <div id="uploadPrompt">
+                <svg class="w-12 h-12 mx-auto text-sand/40 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                </svg>
+                <p class="text-mocha/70 mb-2">Drag and drop an image here, or</p>
+                <button type="button" id="browseImageBtn" class="px-4 py-2 bg-sand/20 hover:bg-sand/30 text-charcoal rounded-sm transition-colors inline-flex items-center">
+                  <svg class="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13" />
+                  </svg>
+                  Browse Files
+                </button>
+                <input type="file" id="articleImageInput" class="hidden" accept="image/*" />
+              </div>
+              <p class="text-xs text-mocha/60 mt-2">Recommended size: 1200x800px. Max size: 2MB</p>
+            </div>
+            <div id="imageError" class="text-red-500 text-sm mt-1 hidden"></div>
+          </div>
+          
+          <!-- Category Selection -->
+          <div>
+            <label for="articleCategory" class="block text-charcoal font-medium mb-2">Category</label>
+            <div class="relative">
+              <select 
+                id="articleCategory" 
+                name="category" 
+                class="w-full appearance-none bg-white border border-sand/50 rounded-sm px-4 py-3 pr-8 focus:border-gold focus:ring-1 focus:ring-gold/20 transition-all"
+                required
+              >
+                <option value="" disabled selected>Select a category</option>
+                <option value="lifestyle">Lifestyle</option>
+                <option value="travel">Travel</option>
+                <option value="wellness">Wellness</option>
+                <option value="design">Design</option>
+              </select>
+              <svg class="w-4 h-4 absolute right-3 top-1/2 transform -translate-y-1/2 text-mocha/60 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+              </svg>
+            </div>
+            <div id="categoryError" class="text-red-500 text-sm mt-1 hidden"></div>
+          </div>
+          
+          <!-- Article Title -->
+          <div>
+            <label for="articleTitle" class="block text-charcoal font-medium mb-2">Title</label>
+            <input 
+              type="text" 
+              id="articleTitle" 
+              name="title" 
+              placeholder="Enter article title" 
+              class="w-full px-4 py-3 border border-sand/50 rounded-sm focus:border-gold focus:ring-1 focus:ring-gold/20 transition-all"
+              required
+            />
+            <div id="titleError" class="text-red-500 text-sm mt-1 hidden"></div>
+          </div>
+          
+          <!-- Article Excerpt -->
+          <div>
+            <label for="articleExcerpt" class="block text-charcoal font-medium mb-2">Excerpt</label>
+            <textarea 
+              id="articleExcerpt" 
+              name="excerpt" 
+              placeholder="Brief summary of your article" 
+              rows="2"
+              class="w-full px-4 py-3 border border-sand/50 rounded-sm focus:border-gold focus:ring-1 focus:ring-gold/20 transition-all resize-none"
+              required
+            ></textarea>
+            <div id="excerptError" class="text-red-500 text-sm mt-1 hidden"></div>
+          </div>
+          
+          <!-- Article Content -->
+          <div>
+            <label for="articleContent" class="block text-charcoal font-medium mb-2">Content</label>
+            <textarea 
+              id="articleContent" 
+              name="content" 
+              placeholder="Write your article here..." 
+              rows="8"
+              class="w-full px-4 py-3 border border-sand/50 rounded-sm focus:border-gold focus:ring-1 focus:ring-gold/20 transition-all"
+              required
+            ></textarea>
+            <div id="contentError" class="text-red-500 text-sm mt-1 hidden"></div>
+          </div>
+        </form>
+      </div>
+      
+      <!-- Modal Footer -->
+      <div class="bg-sand/10 px-6 py-4 border-t border-sand/30 flex justify-end space-x-4">
+        <button id="cancelArticleBtn" class="px-6 py-3 border border-sand hover:border-charcoal text-charcoal rounded-sm transition-colors">
+          Cancel
+        </button>
+        <button id="submitArticleBtn" class="px-6 py-3 bg-gold hover:bg-gold/90 text-white rounded-sm transition-colors flex items-center">
+          <span>Post Article</span>
+          <svg id="submitSpinner" class="w-5 h-5 ml-2 animate-spin hidden" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Toast Notification -->
+  <div id="toastNotification" class="fixed bottom-4 left-1/2 transform -translate-x-1/2 bg-charcoal text-white py-3 px-6 rounded-lg shadow-lg z-50 opacity-0 pointer-events-none transition-opacity duration-300 flex items-center">
+    <svg id="toastSuccessIcon" class="w-5 h-5 mr-2 text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+    </svg>
+    <svg id="toastErrorIcon" class="w-5 h-5 mr-2 text-red-400 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+    </svg>
+    <span id="toastMessage"></span>
+  </div>
+
+  <style>
+    .filter-btn {
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .filter-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    
+    .filter-btn.active {
+      transform: translateY(-1px);
+      box-shadow: 0 3px 8px rgba(0,0,0,0.15);
+    }
+    
+    .blog-article {
+      transition: opacity 0.3s ease-in-out, transform 0.3s ease;
+    }
+    
+    .blog-article.filtering {
+      opacity: 0.5;
+      transform: scale(0.98);
+    }
+    
+    .pagination-btn {
+      transition: all 0.2s ease;
+    }
+    
+    .pagination-btn:hover:not(:disabled) {
+      transform: translateY(-1px);
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    
+    .pagination-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  </style>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const filterButtons = document.querySelectorAll('.filter-btn');
+      const blogGrid = document.getElementById('blogGrid');
+      const articlesPerPage = 6; // 3 columns x 2 rows
+      let currentPage = 1;
+      let currentCategory = 'all';
+      let selectedImage = null;
+      let allArticles = [];
+      
+      // FAB Functionality
+      const fabButton = document.getElementById('postArticleFab');
+      const fabTooltip = document.getElementById('fabTooltip');
+      const modal = document.getElementById('postArticleModal');
+      const closeModalBtn = document.getElementById('closeModalBtn');
+      const cancelArticleBtn = document.getElementById('cancelArticleBtn');
+      const submitArticleBtn = document.getElementById('submitArticleBtn');
+      const postArticleForm = document.getElementById('postArticleForm');
+      const browseImageBtn = document.getElementById('browseImageBtn');
+      const articleImageInput = document.getElementById('articleImageInput');
+      const imagePreviewContainer = document.getElementById('imagePreviewContainer');
+      const imagePreview = document.getElementById('imagePreview');
+      const uploadPrompt = document.getElementById('uploadPrompt');
+      const imageUploadContainer = document.getElementById('imageUploadContainer');
+      const toastNotification = document.getElementById('toastNotification');
+      const toastMessage = document.getElementById('toastMessage');
+      const toastSuccessIcon = document.getElementById('toastSuccessIcon');
+      const toastErrorIcon = document.getElementById('toastErrorIcon');
+      const submitSpinner = document.getElementById('submitSpinner');
+      
+      // Load all articles (default + user-created)
+      loadAllArticles();
+      
+      // Check URL parameters for actions
+      const urlParams = new URLSearchParams(window.location.search);
+      const action = urlParams.get('action');
+      const articleId = urlParams.get('id');
+      
+      // Handle different actions
+      if (action === 'post') {
+        openPostArticleModal();
+        
+        // Clean up the URL
+        const cleanUrl = window.location.pathname;
+        window.history.replaceState({}, document.title, cleanUrl);
+      } else if (action === 'edit' && articleId) {
+        // Load article data and open modal for editing
+        loadArticleForEditing(articleId);
+        
+        // Clean up the URL
+        const cleanUrl = window.location.pathname;
+        window.history.replaceState({}, document.title, cleanUrl);
+      }
+      
+      // Function to load all articles from backend API
+      async function loadAllArticles() {
+        console.log('🔄 Loading articles from API...');
+        
+        try {
+          const apiUrl = `${import.meta.env.PUBLIC_API_URL || 'http://localhost:3001/api'}/posts`;
+          console.log(`📡 Fetching from: ${apiUrl}`);
+          
+          // Fetch articles from backend API
+          const response = await fetch(apiUrl);
+          
+          console.log(`📊 Response status: ${response.status} ${response.statusText}`);
+          
+          if (!response.ok) {
+            throw new Error(`HTTP ${response.status}: Failed to fetch articles`);
+          }
+          
+          const result = await response.json();
+          console.log('📦 API Response:', result);
+          
+          let apiArticles = result.data || [];
+          console.log(`📄 Raw articles from API: ${apiArticles.length}`);
+          
+          // Transform API articles to match frontend format
+          apiArticles = apiArticles.map(article => {
+            console.log(`🔄 Processing article: ${article.title}`);
+            return {
+              id: article._id,
+              title: article.title,
+              excerpt: article.excerpt,
+              content: article.content,
+              date: new Date(article.createdAt).toLocaleDateString('en-US', { 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric' 
+              }),
+              author: article.author?.name || 'Unknown Author',
+              authorAvatar: article.author?.avatar,
+              image: article.featuredImage?.startsWith('/uploads/') 
+                ? `${import.meta.env.PUBLIC_API_URL || 'http://localhost:3001'}${article.featuredImage}`
+                : article.featuredImage,
+              category: article.category?.name || article.category,
+              slug: `/article?id=${article._id}`,
+              readTime: `${article.readTime || 3} min read`,
+              publishedAt: article.createdAt,
+              views: article.views || 0,
+              status: article.status
+            };
+          });
+          
+          console.log(`✅ Transformed ${apiArticles.length} articles`);
+          
+          // Filter only published articles for public view
+          allArticles = apiArticles.filter(article => article.status === 'published');
+          console.log(`📋 Published articles: ${allArticles.length}`);
+          
+          if (allArticles.length === 0) {
+            console.warn('⚠️ No published articles found in API response');
+          } else {
+            console.log('🎯 Sample article:', {
+              title: allArticles[0].title,
+              author: allArticles[0].author,
+              category: allArticles[0].category,
+              status: allArticles[0].status
+            });
+          }
+          
+        } catch (error) {
+          console.error('❌ Error loading articles from API:', error);
+          console.log('🔄 Falling back to default articles...');
+          
+          // Fallback to default articles if API fails
+          allArticles = [
+            {
+              title: "The Art of Luxury Living",
+              excerpt: "Discover the principles of luxurious living and how to incorporate them into your everyday life.",
+              date: "March 20, 2025",
+              author: "Sophia Laurent",
+              image: "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80",
+              category: "Lifestyle",
+              slug: "/blog/art-of-luxury-living",
+              readTime: "5 min read"
+            },
+            {
+              title: "Minimalist Luxury: Less is More",
+              excerpt: "How embracing minimalism can actually enhance your luxury experience.",
+              date: "March 18, 2025",
+              author: "Alexander Grey",
+              image: "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80",
+              category: "Lifestyle",
+              slug: "/blog/minimalist-luxury",
+              readTime: "4 min read"
+            },
+            {
+              title: "The Perfect Morning Routine",
+              excerpt: "Start your day with intention and elegance using this curated morning routine.",
+              date: "March 15, 2025",
+              author: "Emma Wilson",
+              image: "https://images.unsplash.com/photo-1545205597-3d9d02c29597?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80",
+              category: "Wellness",
+              slug: "/blog/perfect-morning-routine",
+              readTime: "3 min read"
+            }
+          ];
+          
+          console.log(`🔄 Using ${allArticles.length} fallback articles`);
+        }
+        
+        // Clear the grid
+        blogGrid.innerHTML = '';
+        
+        // Render all articles
+        allArticles.forEach(post => {
+          const articleElement = document.createElement('div');
+          articleElement.setAttribute('data-category', post.category.toLowerCase());
+          articleElement.className = 'blog-article';
+          
+          // Create blog card HTML
+          articleElement.innerHTML = `
+            <article class="luxury-card overflow-hidden group h-full flex flex-col">
+              <div class="relative">
+                <div class="aspect-video overflow-hidden">
+                  <img 
+                    src="${post.image}" 
+                    alt="${post.title}"
+                    class="object-cover w-full h-full group-hover:scale-105 transition-transform duration-500"
+                    onerror="this.src='https://placehold.co/600x400/F9F5EB/gold?text=Luxe+Blog';this.onerror='';"
+                  />
+                </div>
+                <div class="absolute top-4 right-4 bg-gold text-white text-sm py-1 px-3 rounded-sm">
+                  ${post.category}
+                </div>
+              </div>
+              <div class="p-6 flex-grow flex flex-col">
+                <div class="flex items-center justify-between mb-3">
+                  <div class="flex items-center">
+                    <div class="w-8 h-8 rounded-full bg-sand/30 flex items-center justify-center text-gold mr-2 overflow-hidden">
+                      ${post.authorAvatar ? 
+                        `<img src="${post.authorAvatar}" alt="${post.author}" class="w-full h-full object-cover" />` : 
+                        `<span class="text-sm font-medium">${post.author.charAt(0)}</span>`
+                      }
+                    </div>
+                    <div>
+                      <div class="text-sm font-medium text-charcoal">${post.author}</div>
+                      <div class="text-xs text-mocha/70">
+                        ${post.date}
+                        ${post.readTime ? ` • ${post.readTime}` : ''}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <h3 class="text-xl mb-3 font-serif group-hover:text-gold transition-colors">
+                  <a href="${post.slug}">${post.title}</a>
+                </h3>
+                <p class="text-mocha mb-5 flex-grow">${post.excerpt}</p>
+                <div class="flex items-center justify-between">
+                  <a href="${post.slug}" class="text-gold font-medium hover:underline inline-flex items-center">
+                    Read More
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                    </svg>
+                  </a>
+                  ${post.publishedAt ? 
+                    `<span class="text-xs text-mocha/60" title="${new Date(post.publishedAt).toLocaleString()}">
+                      ${new Date(post.publishedAt).toLocaleDateString()}
+                    </span>` : ''
+                  }
+                </div>
+              </div>
+            </article>
+          `;
+          
+          blogGrid.appendChild(articleElement);
+        });
+        
+        // Update blog articles reference after rendering
+        const blogArticles = document.querySelectorAll('.blog-article');
+        
+        // Show articles for current page and category
+        showArticlesForPage(currentPage);
+        updateResultsCounter(currentCategory);
+        generatePagination();
+      }
+      
+      // Show tooltip on hover
+      fabButton.addEventListener('mouseenter', () => {
+        fabTooltip.style.opacity = '1';
+      });
+      
+      // Hide tooltip when not hovering
+      fabButton.addEventListener('mouseleave', () => {
+        fabTooltip.style.opacity = '0';
+      });
+      
+      // Open modal on click
+      fabButton.addEventListener('click', () => {
+        openPostArticleModal();
+      });
+      
+      // Close modal on button click
+      closeModalBtn.addEventListener('click', closePostArticleModal);
+      cancelArticleBtn.addEventListener('click', closePostArticleModal);
+      
+      // Close modal when clicking outside
+      modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+          closePostArticleModal();
+        }
+      });
+      
+      // Image upload functionality
+      browseImageBtn.addEventListener('click', () => {
+        articleImageInput.click();
+      });
+      
+      // Handle file selection
+      articleImageInput.addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (file) {
+          handleImageUpload(file);
+        }
+      });
+      
+      // Drag and drop functionality
+      imageUploadContainer.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        imageUploadContainer.classList.add('border-gold', 'bg-sand/10');
+      });
+      
+      imageUploadContainer.addEventListener('dragleave', () => {
+        imageUploadContainer.classList.remove('border-gold', 'bg-sand/10');
+      });
+      
+      imageUploadContainer.addEventListener('drop', (e) => {
+        e.preventDefault();
+        imageUploadContainer.classList.remove('border-gold', 'bg-sand/10');
+        
+        if (e.dataTransfer.files.length) {
+          const file = e.dataTransfer.files[0];
+          if (file.type.startsWith('image/')) {
+            handleImageUpload(file);
+          } else {
+            showError('imageError', 'Please upload an image file');
+          }
+        }
+      });
+      
+      // Form validation and submission
+      submitArticleBtn.addEventListener('click', async () => {
+        if (validateForm()) {
+          await submitArticle();
+        }
+      });
+      
+      // Modal functions
+      function openPostArticleModal() {
+        modal.classList.remove('opacity-0', 'pointer-events-none');
+        document.body.style.overflow = 'hidden'; // Prevent scrolling behind modal
+      }
+      
+      function closePostArticleModal() {
+        modal.classList.add('opacity-0', 'pointer-events-none');
+        document.body.style.overflow = ''; // Re-enable scrolling
+        resetForm();
+      }
+      
+      // Handle image upload
+      function handleImageUpload(file) {
+        // Check file size (max 2MB)
+        if (file.size > 2 * 1024 * 1024) {
+          showError('imageError', 'Image size should not exceed 2MB');
+          return;
+        }
+        
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          // Store image as base64 data URL for persistence
+          imagePreview.src = e.target.result;
+          imagePreviewContainer.classList.remove('hidden');
+          uploadPrompt.classList.add('hidden');
+          selectedImage = file;
+          hideError('imageError');
+        };
+        reader.readAsDataURL(file);
+      }
+      
+      function validateForm() {
+        let isValid = true;
+        
+        // Validate image
+        if (!selectedImage) {
+          showError('imageError', 'Please upload an image for your article');
+          isValid = false;
+        }
+        
+        // Validate category
+        const category = document.getElementById('articleCategory').value;
+        if (!category) {
+          showError('categoryError', 'Please select a category');
+          isValid = false;
+        }
+        
+        // Validate title
+        const title = document.getElementById('articleTitle').value.trim();
+        if (!title) {
+          showError('titleError', 'Please enter a title');
+          isValid = false;
+        }
+        
+        // Validate excerpt
+        const excerpt = document.getElementById('articleExcerpt').value.trim();
+        if (!excerpt) {
+          showError('excerptError', 'Please enter an excerpt');
+          isValid = false;
+        }
+        
+        // Validate content
+        const content = document.getElementById('articleContent').value.trim();
+        if (!content) {
+          showError('contentError', 'Please enter article content');
+          isValid = false;
+        }
+        
+        return isValid;
+      }
+      
+      function showError(elementId, message) {
+        const errorElement = document.getElementById(elementId);
+        errorElement.textContent = message;
+        errorElement.classList.remove('hidden');
+      }
+      
+      function hideError(elementId) {
+        const errorElement = document.getElementById(elementId);
+        errorElement.classList.add('hidden');
+      }
+      
+      async function submitArticle() {
+        // Show loading state
+        submitArticleBtn.disabled = true;
+        submitSpinner.classList.remove('hidden');
+        
+        try {
+          // Get form data
+          const title = document.getElementById('articleTitle').value.trim();
+          const excerpt = document.getElementById('articleExcerpt').value.trim();
+          const content = document.getElementById('articleContent').value.trim();
+          const category = document.getElementById('articleCategory').value;
+          
+          // Check if we're editing an existing article
+          const articleForm = document.getElementById('postArticleForm');
+          const articleId = articleForm.getAttribute('data-article-id');
+          const isEditing = !!articleId;
+          
+          // Check if user is authenticated
+          const token = localStorage.getItem('token');
+          if (!token) {
+            showToast('Please log in to post articles', 'error');
+            return;
+          }
+          
+          let featuredImageUrl = '';
+          
+          // Upload image if selected
+          if (selectedImage && typeof selectedImage === 'object') {
+            const imageFormData = new FormData();
+            imageFormData.append('image', selectedImage);
+            
+            const imageResponse = await fetch(`${import.meta.env.PUBLIC_API_URL || 'http://localhost:3001/api'}/upload/image`, {
+              method: 'POST',
+              headers: {
+                'Authorization': `Bearer ${token}`
+              },
+              body: imageFormData
+            });
+            
+            if (imageResponse.ok) {
+              const imageResult = await imageResponse.json();
+              featuredImageUrl = imageResult.data.url;
+            } else {
+              const imageError = await imageResponse.json();
+              if (imageResponse.status === 401) {
+                throw new Error('Please log in to upload images');
+              } else if (imageResponse.status === 413) {
+                throw new Error('Image file is too large. Maximum size is 2MB.');
+              } else {
+                throw new Error(imageError.message || 'Failed to upload image');
+              }
+            }
+          }
+          
+          // Get category ID (for now, we'll use category name directly)
+          // In a real implementation, you'd fetch categories and map names to IDs
+          const categoryMapping = {
+            'lifestyle': 'lifestyle',
+            'travel': 'travel', 
+            'wellness': 'wellness',
+            'design': 'design'
+          };
+          
+          // Prepare article data
+          const articleData = {
+            title,
+            excerpt,
+            content,
+            category: categoryMapping[category] || category,
+            status: 'published'
+          };
+          
+          // Add featured image if uploaded
+          if (featuredImageUrl) {
+            articleData.featuredImage = featuredImageUrl;
+          }
+          
+          let response;
+          
+          if (isEditing) {
+            // Update existing article
+            response = await fetch(`${import.meta.env.PUBLIC_API_URL || 'http://localhost:3001/api'}/posts/${articleId}`, {
+              method: 'PUT',
+              headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+              },
+              body: JSON.stringify(articleData)
+            });
+          } else {
+            // Create new article
+            response = await fetch(`${import.meta.env.PUBLIC_API_URL || 'http://localhost:3001/api'}/posts`, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+              },
+              body: JSON.stringify(articleData)
+            });
+          }
+          
+          if (!response.ok) {
+            const errorResult = await response.json();
+            
+            // Handle specific error types
+            if (response.status === 401) {
+              throw new Error('Please log in to post articles');
+            } else if (response.status === 403) {
+              throw new Error('You do not have permission to post articles. Please contact support.');
+            } else {
+              throw new Error(errorResult.message || 'Failed to save article');
+            }
+          }
+          
+          // Close modal and reset form
+          closePostArticleModal();
+          
+          // Reload articles to show the new/updated article
+          await loadAllArticles();
+          
+          // Show success toast
+          setTimeout(() => {
+            showToast(isEditing ? 'Article updated successfully!' : 'Article published successfully!', 'success');
+          }, 500);
+          
+        } catch (error) {
+          console.error('Error submitting article:', error);
+          showToast(error.message || 'Failed to publish article. Please try again.', 'error');
+        } finally {
+          // Reset loading state
+          submitArticleBtn.disabled = false;
+          submitSpinner.classList.add('hidden');
+        }
+      }
+      
+      function resetForm() {
+        postArticleForm.reset();
+        selectedImage = null;
+        imagePreviewContainer.classList.add('hidden');
+        uploadPrompt.classList.remove('hidden');
+        hideError('imageError');
+        hideError('categoryError');
+        hideError('titleError');
+        hideError('excerptError');
+        hideError('contentError');
+        
+        // Reset modal title
+        const modalTitle = document.querySelector('#postArticleModal h3');
+        if (modalTitle) {
+          modalTitle.textContent = 'Post a New Article';
+        }
+        
+        // Reset submit button text
+        const submitButtonText = document.querySelector('#submitArticleBtn span');
+        if (submitButtonText) {
+          submitButtonText.textContent = 'Post Article';
+        }
+        
+        // Remove article ID data attribute
+        postArticleForm.removeAttribute('data-article-id');
+      }
+      
+      function showToast(message, type = 'success') {
+        toastMessage.textContent = message;
+        
+        if (type === 'success') {
+          toastSuccessIcon.classList.remove('hidden');
+          toastErrorIcon.classList.add('hidden');
+        } else {
+          toastSuccessIcon.classList.add('hidden');
+          toastErrorIcon.classList.remove('hidden');
+        }
+        
+        toastNotification.classList.remove('opacity-0', 'pointer-events-none');
+        
+        setTimeout(() => {
+          toastNotification.classList.add('opacity-0', 'pointer-events-none');
+        }, 3000);
+      }
+      
+      // Function to load article data for editing from API
+      async function loadArticleForEditing(articleId) {
+        try {
+          // Check if user is authenticated
+          const token = localStorage.getItem('token');
+          if (!token) {
+            showToast('Please log in to edit articles', 'error');
+            return;
+          }
+          
+          // Fetch article from API
+          const response = await fetch(`${import.meta.env.PUBLIC_API_URL || 'http://localhost:3001/api'}/posts/${articleId}`, {
+            headers: {
+              'Authorization': `Bearer ${token}`
+            }
+          });
+          
+          if (!response.ok) {
+            throw new Error('Article not found or access denied');
+          }
+          
+          const result = await response.json();
+          const article = result.data;
+          
+          // Update modal title
+          const modalTitle = document.querySelector('#postArticleModal h3');
+          if (modalTitle) {
+            modalTitle.textContent = 'Edit Article';
+          }
+          
+          // Update submit button text
+          const submitButtonText = document.querySelector('#submitArticleBtn span');
+          if (submitButtonText) {
+            submitButtonText.textContent = 'Update Article';
+          }
+          
+          // Set form values
+          document.getElementById('articleTitle').value = article.title || '';
+          document.getElementById('articleExcerpt').value = article.excerpt || '';
+          document.getElementById('articleContent').value = article.content || '';
+          
+          // Set category
+          const categorySelect = document.getElementById('articleCategory');
+          const categoryValue = article.category?.name || article.category || '';
+          
+          for (let i = 0; i < categorySelect.options.length; i++) {
+            if (categorySelect.options[i].value.toLowerCase() === categoryValue.toLowerCase()) {
+              categorySelect.selectedIndex = i;
+              break;
+            }
+          }
+          
+          // Handle image preview
+          if (article.featuredImage && article.featuredImage !== 'default-post.jpg') {
+            const imagePreview = document.getElementById('imagePreview');
+            const imagePreviewContainer = document.getElementById('imagePreviewContainer');
+            const uploadPrompt = document.getElementById('uploadPrompt');
+            
+            // Set image source with proper URL
+            let imageSrc = article.featuredImage;
+            if (imageSrc.startsWith('/uploads/')) {
+              imageSrc = `${import.meta.env.PUBLIC_API_URL || 'http://localhost:3001'}${imageSrc}`;
+            }
+            
+            imagePreview.src = imageSrc;
+            imagePreviewContainer.classList.remove('hidden');
+            uploadPrompt.classList.add('hidden');
+            
+            // Create a placeholder for existing image
+            selectedImage = 'existing'; // Placeholder to pass validation
+          }
+          
+          // Add article ID as a data attribute to the form
+          document.getElementById('postArticleForm').setAttribute('data-article-id', articleId);
+          
+          // Open the modal
+          openPostArticleModal();
+        } catch (error) {
+          console.error('Error loading article for editing:', error);
+          showToast('Failed to load article for editing', 'error');
+        }
+      }
+      
+      // Function to filter articles
+      function filterArticles(category) {
+        currentCategory = category;
+        currentPage = 1; // Reset to first page when filtering
+        
+        const blogArticles = document.querySelectorAll('.blog-article');
+        
+        // Add filtering class for smooth transition
+        blogArticles.forEach(article => {
+          article.classList.add('filtering');
+        });
+        
+        setTimeout(() => {
+          // Show articles for current page and category
+          showArticlesForPage(currentPage);
+          
+          // Remove filtering class
+          blogArticles.forEach(article => {
+            article.classList.remove('filtering');
+          });
+          
+          // Update results counter and pagination
+          updateResultsCounter(category);
+          generatePagination();
+        }, 150);
+      }
+      
+      // Function to update results counter
+      function updateResultsCounter(category) {
+        const filteredArticles = getVisibleArticles();
+        const blogArticles = document.querySelectorAll('.blog-article');
+        const totalArticles = blogArticles.length;
+        const startIndex = (currentPage - 1) * articlesPerPage + 1;
+        const endIndex = Math.min(currentPage * articlesPerPage, filteredArticles.length);
+        
+        // Create or update counter element
+        let counter = document.getElementById('resultsCounter');
+        if (!counter) {
+          counter = document.createElement('div');
+          counter.id = 'resultsCounter';
+          counter.className = 'text-center text-mocha text-sm mt-4 mb-8';
+          document.getElementById('blogGrid').parentNode.insertBefore(counter, document.getElementById('blogGrid').nextSibling);
+        }
+        
+        if (category === 'all') {
+          if (filteredArticles.length <= articlesPerPage) {
+            counter.textContent = `Showing all ${filteredArticles.length} articles`;
+          } else {
+            counter.textContent = `Showing ${startIndex}-${endIndex} of ${filteredArticles.length} articles`;
+          }
+        } else {
+          const categoryName = category.charAt(0).toUpperCase() + category.slice(1);
+          if (filteredArticles.length <= articlesPerPage) {
+            counter.textContent = `Showing all ${filteredArticles.length} ${categoryName} articles`;
+          } else {
+            counter.textContent = `Showing ${startIndex}-${endIndex} of ${filteredArticles.length} ${categoryName} articles`;
+          }
+        }
+      }
+      
+      // Function to get visible articles for current category
+      function getVisibleArticles() {
+        const blogArticles = document.querySelectorAll('.blog-article');
+        return Array.from(blogArticles).filter(article => {
+          const articleCategory = article.getAttribute('data-category');
+          return currentCategory === 'all' || articleCategory === currentCategory;
+        });
+      }
+      
+      // Function to show articles for current page
+      function showArticlesForPage(page) {
+        const visibleArticles = getVisibleArticles();
+        const startIndex = (page - 1) * articlesPerPage;
+        const endIndex = startIndex + articlesPerPage;
+        
+        const blogArticles = document.querySelectorAll('.blog-article');
+        
+        // Hide all articles first
+        blogArticles.forEach(article => {
+          article.style.display = 'none';
+        });
+        
+        // Show articles for current page and category
+        visibleArticles.forEach((article, index) => {
+          if (index >= startIndex && index < endIndex) {
+            article.style.display = 'block';
+            article.style.opacity = '0';
+            setTimeout(() => {
+              article.style.opacity = '1';
+            }, 50 + (index - startIndex) * 50);
+          }
+        });
+      }
+      
+      // Function to generate pagination
+      function generatePagination() {
+        const visibleArticles = getVisibleArticles();
+        const totalPages = Math.ceil(visibleArticles.length / articlesPerPage);
+        const paginationNav = document.getElementById('paginationNav');
+        const paginationSection = document.getElementById('paginationSection');
+        
+        // Hide pagination if only 1 page or no articles
+        if (totalPages <= 1) {
+          paginationSection.style.display = 'none';
+          return;
+        }
+        
+        paginationSection.style.display = 'block';
+        paginationNav.innerHTML = '';
+        
+        // Previous button
+        const prevButton = document.createElement('button');
+        prevButton.className = `pagination-btn px-4 py-2 border border-sand transition-colors rounded-l-sm ${
+          currentPage === 1 
+            ? 'text-mocha/50 cursor-not-allowed' 
+            : 'hover:border-gold hover:bg-sand cursor-pointer'
+        }`;
+        prevButton.textContent = 'Previous';
+        prevButton.disabled = currentPage === 1;
+        prevButton.addEventListener('click', () => {
+          if (currentPage > 1) {
+            currentPage--;
+            showArticlesForPage(currentPage);
+            updateResultsCounter(currentCategory);
+            generatePagination();
+          }
+        });
+        paginationNav.appendChild(prevButton);
+        
+        // Page number buttons
+        for (let i = 1; i <= totalPages; i++) {
+          const pageButton = document.createElement('button');
+          pageButton.className = `pagination-btn px-4 py-2 border transition-colors ${
+            i === currentPage 
+              ? 'bg-gold text-white border-gold' 
+              : 'border-sand hover:border-gold hover:bg-sand'
+          }`;
+          pageButton.textContent = i;
+          pageButton.addEventListener('click', () => {
+            currentPage = i;
+            showArticlesForPage(currentPage);
+            updateResultsCounter(currentCategory);
+            generatePagination();
+          });
+          paginationNav.appendChild(pageButton);
+        }
+        
+        // Next button
+        const nextButton = document.createElement('button');
+        nextButton.className = `pagination-btn px-4 py-2 border border-sand transition-colors rounded-r-sm ${
+          currentPage === totalPages 
+            ? 'text-mocha/50 cursor-not-allowed' 
+            : 'hover:border-gold hover:bg-sand cursor-pointer'
+        }`;
+        nextButton.textContent = 'Next';
+        nextButton.disabled = currentPage === totalPages;
+        nextButton.addEventListener('click', () => {
+          if (currentPage < totalPages) {
+            currentPage++;
+            showArticlesForPage(currentPage);
+            updateResultsCounter(currentCategory);
+            generatePagination();
+          }
+        });
+        paginationNav.appendChild(nextButton);
+      }
+      
+      // Function to update active button
+      function updateActiveButton(activeButton) {
+        filterButtons.forEach(btn => {
+          btn.classList.remove('active', 'bg-gold', 'text-white');
+          btn.classList.add('border', 'border-sand', 'hover:border-gold', 'hover:bg-sand', 'transition-colors');
+        });
+        
+        activeButton.classList.add('active', 'bg-gold', 'text-white');
+        activeButton.classList.remove('border', 'border-sand', 'hover:border-gold', 'hover:bg-sand');
+      }
+      
+      // Add click event listeners to filter buttons
+      filterButtons.forEach(button => {
+        button.addEventListener('click', function(e) {
+          e.preventDefault();
+          
+          const category = this.getAttribute('data-category');
+          
+          // Update active button
+          updateActiveButton(this);
+          
+          // Filter articles
+          filterArticles(category);
+          
+          // Update URL without page reload (optional)
+          const newUrl = category === 'all' ? '/blog' : `/blog/category/${category}`;
+          window.history.pushState({category: category}, '', newUrl);
+        });
+      });
+      
+      // Add smooth transitions to articles after they are loaded
+      setTimeout(() => {
+        const blogArticles = document.querySelectorAll('.blog-article');
+        blogArticles.forEach(article => {
+          article.style.transition = 'opacity 0.3s ease-in-out';
+        });
+      }, 100);
+      
+      // Handle browser back/forward buttons
+      window.addEventListener('popstate', function(event) {
+        const category = event.state ? event.state.category : 'all';
+        const targetButton = document.querySelector(`[data-category="${category}"]`);
+        
+        if (targetButton) {
+          updateActiveButton(targetButton);
+          filterArticles(category);
+        }
+      });
+    });
+  </script>
+</MainLayout>

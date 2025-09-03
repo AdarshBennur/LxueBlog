@@ -1,0 +1,75 @@
+---
+interface Post {
+  title: string;
+  excerpt: string;
+  date: string;
+  author: string;
+  authorAvatar?: string;
+  image: string;
+  category: string;
+  slug: string;
+  readTime?: string;
+  publishedAt?: string;
+  views?: number;
+  comments?: number;
+}
+
+interface Props {
+  post: Post;
+}
+
+const { post } = Astro.props;
+---
+
+<article class="luxury-card overflow-hidden group h-full flex flex-col">
+  <div class="relative">
+    <div class="aspect-video overflow-hidden">
+      <img 
+        src={post.image} 
+        alt={post.title}
+        class="object-cover w-full h-full group-hover:scale-105 transition-transform duration-500"
+        onerror="this.src='https://placehold.co/600x400/F9F5EB/gold?text=Luxe+Blog';this.onerror='';"
+      />
+    </div>
+    <div class="absolute top-4 right-4 bg-gold text-white text-sm py-1 px-3 rounded-sm">
+      {post.category}
+    </div>
+  </div>
+  <div class="p-6 flex-grow flex flex-col">
+    <div class="flex items-center justify-between mb-3">
+      <div class="flex items-center">
+        <div class="w-8 h-8 rounded-full bg-sand/30 flex items-center justify-center text-gold mr-2 overflow-hidden">
+          {post.authorAvatar ? (
+            <img src={post.authorAvatar} alt={post.author} class="w-full h-full object-cover" />
+          ) : (
+            <span class="text-sm font-medium">{post.author.charAt(0)}</span>
+          )}
+        </div>
+        <div>
+          <div class="text-sm font-medium text-charcoal">{post.author}</div>
+          <div class="text-xs text-mocha/70">
+            {post.date}
+            {post.readTime && <span> • {post.readTime}</span>}
+          </div>
+        </div>
+      </div>
+    </div>
+    <h3 class="text-xl mb-3 font-serif group-hover:text-gold transition-colors">
+      <a href={post.slug}>{post.title}</a>
+    </h3>
+    <p class="text-mocha mb-5 flex-grow">{post.excerpt}</p>
+    <div class="flex items-center justify-between">
+      <a href={post.slug} class="text-gold font-medium hover:underline inline-flex items-center">
+        Read More
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+        </svg>
+      </a>
+      {post.publishedAt && (
+        <span class="text-xs text-mocha/60" title={new Date(post.publishedAt).toLocaleString()}>
+          {new Date(post.publishedAt).toLocaleDateString()}
+        </span>
+      )}
+    </div>
+  </div>
+</article>

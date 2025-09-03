@@ -1,0 +1,278 @@
+---
+import MainLayout from '../layouts/MainLayout.astro';
+import CommentSection from '../components/CommentSection.astro';
+---
+
+<MainLayout title="Article" description="Read the full article" currentPage="blog">
+  <!-- Loading State -->
+  <section id="loadingSection" class="py-16 min-h-screen flex items-center justify-center">
+    <div class="text-center">
+      <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-gold mx-auto mb-4"></div>
+      <p class="text-mocha">Loading article...</p>
+    </div>
+  </section>
+
+  <!-- Article Content -->
+  <article id="articleContent" class="hidden">
+    <!-- Article Header -->
+    <section id="articleHeader" class="py-16 bg-gradient-to-br from-rose/30 to-sand/20">
+      <div class="container-custom max-w-4xl">
+        <div class="text-center">
+          <span id="articleCategory" class="inline-block bg-gold text-white text-sm py-1 px-3 rounded-sm mb-4"></span>
+          <h1 id="articleTitle" class="text-4xl md:text-5xl font-serif mb-4 text-charcoal"></h1>
+          <div class="flex items-center justify-center space-x-6 text-mocha/70 mb-6">
+            <div class="flex items-center">
+              <div id="authorAvatar" class="w-10 h-10 rounded-full bg-sand/30 flex items-center justify-center text-gold mr-3 overflow-hidden">
+                <span id="authorInitial" class="text-sm font-medium"></span>
+              </div>
+              <div class="text-left">
+                <div id="articleAuthor" class="font-medium text-charcoal"></div>
+                <div class="text-sm">
+                  <span id="articleDate"></span>
+                  <span id="articleReadTime" class="ml-2"></span>
+                </div>
+              </div>
+            </div>
+            <div class="flex items-center space-x-4">
+              <span id="articleViews" class="flex items-center">
+                <svg class="w-4 h-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                </svg>
+              </span>
+            </div>
+          </div>
+          <div class="w-16 h-px bg-gold mx-auto"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Featured Image -->
+    <section id="featuredImageSection" class="hidden">
+      <div class="container-custom max-w-4xl py-8">
+        <div class="aspect-video overflow-hidden rounded-lg shadow-lg">
+          <img id="featuredImage" class="w-full h-full object-cover" alt="" />
+        </div>
+      </div>
+    </section>
+
+    <!-- Article Body -->
+    <section class="py-12">
+      <div class="container-custom max-w-4xl">
+        <div class="prose prose-lg max-w-none">
+          <div id="articleExcerpt" class="text-xl text-mocha/90 font-light mb-8 border-l-4 border-gold pl-6 italic"></div>
+          <div id="articleContentBody" class="text-charcoal leading-relaxed space-y-6"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Comments Section -->
+    <section class="py-12 border-t border-sand/30">
+      <div class="container-custom max-w-4xl">
+        <CommentSection postId="" />
+      </div>
+    </section>
+
+    <!-- Back to Blog -->
+    <section class="py-8 border-t border-sand/30">
+      <div class="container-custom max-w-4xl">
+        <a href="/blog" class="inline-flex items-center text-gold hover:text-gold/80 transition-colors">
+          <svg class="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+          </svg>
+          Back to Articles
+        </a>
+      </div>
+    </section>
+  </article>
+
+  <!-- Error State -->
+  <section id="errorSection" class="hidden py-16 min-h-screen flex items-center justify-center">
+    <div class="text-center">
+      <svg class="w-16 h-16 text-mocha/40 mx-auto mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+      </svg>
+      <h2 class="text-2xl font-serif text-charcoal mb-2">Article Not Found</h2>
+      <p class="text-mocha/70 mb-6">The article you're looking for doesn't exist or has been removed.</p>
+      <a href="/blog" class="inline-flex items-center bg-gold hover:bg-gold/90 text-white px-6 py-3 rounded-sm transition-colors">
+        <svg class="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+        </svg>
+        Back to Articles
+      </a>
+    </div>
+  </section>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', async function() {
+      console.log('🔄 Article page loaded, extracting article ID...');
+      
+      // Get article ID from URL parameters
+      const urlParams = new URLSearchParams(window.location.search);
+      const articleId = urlParams.get('id');
+      
+      if (!articleId) {
+        console.error('❌ No article ID found in URL');
+        showSection('errorSection');
+        return;
+      }
+      
+      console.log(`📄 Loading article with ID: ${articleId}`);
+      
+      try {
+        // Show loading state
+        showSection('loadingSection');
+        
+        // Fetch article from API
+        const apiUrl = `${import.meta.env.PUBLIC_API_URL || 'http://localhost:3001/api'}/posts/${articleId}`;
+        console.log(`📡 Fetching from: ${apiUrl}`);
+        
+        const response = await fetch(apiUrl);
+        
+        console.log(`📊 Response status: ${response.status} ${response.statusText}`);
+        
+        if (!response.ok) {
+          throw new Error('Article not found');
+        }
+        
+        const result = await response.json();
+        const article = result.data;
+        
+        console.log('📦 Article loaded:', article.title);
+        
+        // Populate article content
+        populateArticle(article);
+        
+        // Update comment section with article ID
+        updateCommentSection(articleId);
+        
+        // Show article content
+        showSection('articleContent');
+        
+      } catch (error) {
+        console.error('❌ Error loading article:', error);
+        showSection('errorSection');
+      }
+    });
+    
+    function showSection(sectionId) {
+      // Hide all sections
+      document.getElementById('loadingSection').classList.add('hidden');
+      document.getElementById('articleContent').classList.add('hidden');
+      document.getElementById('errorSection').classList.add('hidden');
+      
+      // Show target section
+      document.getElementById(sectionId).classList.remove('hidden');
+    }
+    
+    function populateArticle(article) {
+      // Set title and meta
+      document.title = `${article.title} | LuxeBlog`;
+      document.getElementById('articleTitle').textContent = article.title;
+      document.getElementById('articleExcerpt').textContent = article.excerpt;
+      
+      // Set category
+      if (article.category) {
+        document.getElementById('articleCategory').textContent = article.category.name || article.category;
+      }
+      
+      // Set author info
+      if (article.author) {
+        const authorName = article.author.name || article.author;
+        document.getElementById('articleAuthor').textContent = authorName;
+        document.getElementById('authorInitial').textContent = authorName.charAt(0);
+        
+        // Set author avatar if available
+        if (article.author.avatar && article.author.avatar !== 'default-avatar.jpg') {
+          const avatarContainer = document.getElementById('authorAvatar');
+          avatarContainer.innerHTML = `<img src="${article.author.avatar}" alt="${authorName}" class="w-full h-full object-cover" />`;
+        }
+      }
+      
+      // Set date and read time
+      if (article.createdAt) {
+        const date = new Date(article.createdAt).toLocaleDateString('en-US', {
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric'
+        });
+        document.getElementById('articleDate').textContent = date;
+      }
+      
+      if (article.readTime) {
+        document.getElementById('articleReadTime').textContent = `• ${article.readTime} min read`;
+      }
+      
+      // Set views
+      document.getElementById('articleViews').innerHTML = `
+        <svg class="w-4 h-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+        </svg>
+        ${article.views || 0} views
+      `;
+      
+      // Set featured image
+      if (article.featuredImage && article.featuredImage !== 'default-post.jpg') {
+        const featuredImageSection = document.getElementById('featuredImageSection');
+        const featuredImage = document.getElementById('featuredImage');
+        
+        // Handle different image sources
+        let imageSrc = article.featuredImage;
+        if (imageSrc.startsWith('/uploads/')) {
+          imageSrc = `${import.meta.env.PUBLIC_API_URL || 'http://localhost:3001'}${imageSrc}`;
+        }
+        
+        featuredImage.src = imageSrc;
+        featuredImage.alt = article.title;
+        featuredImageSection.classList.remove('hidden');
+        
+        // Handle image load error
+        featuredImage.onerror = function() {
+          featuredImageSection.classList.add('hidden');
+        };
+      }
+      
+      // Set content
+      const contentBody = document.getElementById('articleContentBody');
+      // Convert line breaks to paragraphs for better formatting
+      const formattedContent = article.content
+        .split('\n\n')
+        .map(paragraph => `<p>${paragraph.replace(/\n/g, '<br>')}</p>`)
+        .join('');
+      contentBody.innerHTML = formattedContent;
+    }
+    
+    function updateCommentSection(articleId) {
+      // Find the CommentSection component and update its postId
+      const commentSection = document.querySelector('.comment-section');
+      if (commentSection) {
+        // Store the article ID in a data attribute for the component to use
+        commentSection.setAttribute('data-post-id', articleId);
+        
+        // Trigger a custom event to notify the CommentSection component
+        const event = new CustomEvent('updatePostId', { 
+          detail: { postId: articleId } 
+        });
+        commentSection.dispatchEvent(event);
+      }
+    }
+  </script>
+
+  <style>
+    .prose p {
+      margin-bottom: 1.5em;
+      line-height: 1.7;
+    }
+    
+    .prose p:last-child {
+      margin-bottom: 0;
+    }
+    
+    @media (max-width: 768px) {
+      .prose {
+        font-size: 1rem;
+      }
+    }
+  </style>
+</MainLayout>

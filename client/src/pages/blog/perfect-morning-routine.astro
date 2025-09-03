@@ -1,0 +1,254 @@
+---
+import MainLayout from '../../layouts/MainLayout.astro';
+
+const post = {
+  title: "The Perfect Morning Routine",
+  date: "March 15, 2025",
+  author: "Emma Wilson",
+  category: "Wellness",
+  image: "https://images.unsplash.com/photo-1545205597-3d9d02c29597?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80"
+};
+---
+
+<MainLayout title={post.title} description="Start your day with intention and elegance using this curated morning routine.">
+  <!-- Article Hero -->
+  <div class="relative">
+    <div class="h-[60vh] w-full">
+      <img 
+        src={post.image} 
+        alt={post.title}
+        class="w-full h-full object-cover"
+        onerror="this.src='https://placehold.co/1200x600/F9F5EB/gold?text=Luxe+Blog';this.onerror='';"
+      />
+    </div>
+    <div class="absolute inset-0 bg-charcoal bg-opacity-30"></div>
+    <div class="absolute inset-0 flex items-center justify-center">
+      <div class="bg-white bg-opacity-90 p-8 md:p-12 max-w-2xl text-center">
+        <p class="text-gold mb-2">{post.category}</p>
+        <h1 class="mb-6">{post.title}</h1>
+        <p class="text-mocha">By {post.author} • {post.date}</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Article Content -->
+  <article class="py-16">
+    <div class="container-custom max-w-3xl">
+      <div class="prose prose-lg mx-auto">
+        <p class="lead font-serif text-xl">How you begin your day sets the tone for everything that follows. A thoughtfully designed morning routine doesn't just prepare you for the day ahead—it transforms those first waking hours into a luxurious ritual that nourishes your body, mind, and spirit. In this article, we explore the elements of a perfect morning routine that balances wellness, productivity, and pleasure.</p>
+        
+        <div class="divider"></div>
+
+        <h2>The Science Behind Morning Routines</h2>
+        <p>The power of a morning routine extends far beyond simple habit formation. Research in chronobiology—the study of biological rhythms—shows that our bodies and minds are particularly receptive to certain activities during the early hours of the day. Cortisol, often called the "stress hormone," naturally peaks in the morning to help us wake up and engage with our environment. When we harness this natural energy through intentional morning practices, we set ourselves up for enhanced focus, mood stability, and productivity throughout the day.</p>
+
+        <p>Studies have found that individuals who maintain consistent morning routines report lower stress levels, better cognitive performance, and greater overall life satisfaction. This isn't merely correlation—the neurological and hormonal cascades triggered by specific morning activities create a foundation for optimal functioning that persists for hours afterward.</p>
+
+        <blockquote>
+          <p>"The breeze at dawn has secrets to tell you. Don't go back to sleep." — Rumi</p>
+        </blockquote>
+
+        <h2>Core Elements of a Luxury Morning Routine</h2>
+        <p>A truly luxurious morning routine isn't defined by extravagance, but by intentionality, quality, and personal alignment. The following elements form the foundation of a morning practice that feels both indulgent and purposeful:</p>
+
+        <h3>Gentle Awakening</h3>
+        <p>The transition from sleep to wakefulness deserves special attention. Rather than jarring yourself awake with harsh alarms and immediate digital immersion, consider a more gradual approach. Sunrise alarm clocks that simulate natural daybreak can trigger your body's own waking mechanisms. Allow yourself a few moments of stillness before rising—notice your breath, set an intention for the day, and express gratitude for the new beginning before your feet touch the floor.</p>
+
+        <p>This mindful transition honors your body's natural rhythms and creates a boundary between restorative rest and active engagement. For those who appreciate sensory luxury, consider keeping a small atomizer of energizing essential oils (citrus, mint, or rosemary) on your bedside table for a refreshing aromatic experience upon waking.</p>
+
+        <h3>Hydration Ritual</h3>
+        <p>After hours without water, your body needs replenishment. Rather than rushing to caffeine, begin with hydration. A glass of room temperature water with fresh lemon not only rehydrates your system but also stimulates digestion, supports liver function, and provides a gentle vitamin C boost. For those who appreciate aesthetic pleasure, serve this simple elixir in a beautiful glass or carafe that brings you joy to use.</p>
+
+        <p>Consider elevating this ritual further by preparing a more elaborate morning beverage to enjoy after your initial hydration. This might be a carefully brewed cup of single-origin coffee, a ceremonial grade matcha whisked to perfection, or an herbal infusion with fresh ingredients from your garden. The key is mindful preparation and savoring—transforming a basic need into a moment of sensory pleasure.</p>
+
+        <h3>Movement Practice</h3>
+        <p>Morning movement doesn't need to be intense to be effective. Even 10-15 minutes of thoughtful physical activity can awaken your body, stimulate circulation, and clear mental fog. The luxury lies not in expensive equipment or exclusive gym memberships, but in choosing movement that truly resonates with your body and preferences.</p>
+
+        <p>This might be a sequence of yoga poses on a terrace as the sun rises, a brisk walk through gardens or neighborhood streets, gentle stretching beside an open window, or a more vigorous training session if that energizes you. The goal is to connect with your physical form and set a foundation of vitality for the hours ahead.</p>
+
+        <h3>Mindfulness Practice</h3>
+        <p>In a world of constant stimulation, morning moments of mental stillness are perhaps the ultimate luxury. Carving out even five minutes for meditation, breathwork, or contemplative practice can significantly alter your mental and emotional state for the day ahead.</p>
+
+        <p>Create a dedicated space for this practice—perhaps a comfortable chair by a window with natural light, a cushion in a quiet corner adorned with meaningful objects, or even a spot in your garden. The environment should support presence and calm without unnecessary distractions.</p>
+
+        <p>If traditional meditation feels challenging, consider guided options, simple breathing exercises, or even a mindful cup of tea where you focus entirely on the sensory experience. The essence of this practice is presence—a rare commodity in our distracted world.</p>
+
+        <h3>Nourishment</h3>
+        <p>Breaking your fast is an opportunity for thoughtful nourishment rather than rushed consumption. A luxury morning routine includes time for a balanced meal that provides sustained energy and genuine pleasure. This doesn't necessarily mean elaborate preparation—simple, high-quality ingredients thoughtfully combined can create a breakfast that feels both nourishing and special.</p>
+
+        <p>Consider seasonal fruits at peak ripeness, artisanal bread with cultured butter, eggs from pastured hens prepared to your preference, or whole grains topped with nuts and honey from a local apiary. The luxury lies in the quality of ingredients and the attention given to their preparation and presentation.</p>
+
+        <p>Even on busier mornings, maintaining elements of this ritual—perhaps through advance preparation or simplifying while preserving quality—helps maintain the sense of intentional nourishment that elevates a morning routine.</p>
+
+        <h3>Personal Development</h3>
+        <p>Dedicating time to growth and inspiration in the morning hours, when your mind is fresh, can be transformative. This might take the form of reading from a physical book (a sensory experience increasingly rare in our digital age), listening to thought-provoking content, journaling to clarify thoughts, or learning something new.</p>
+
+        <p>The key is choosing material that genuinely inspires and expands your thinking rather than immediately diving into reactive content like news or social media. Even 15 minutes of engagement with ideas that matter to you can set a tone of thoughtful engagement for the day ahead.</p>
+
+        <h2>Crafting Your Personal Morning Ritual</h2>
+        <p>While the elements above provide a framework, a truly luxurious morning routine is one that aligns perfectly with your individual needs, preferences, and circumstances. Consider these factors when designing your own practice:</p>
+
+        <h3>Honor Your Chronotype</h3>
+        <p>We each have natural tendencies toward being early risers or night owls—what sleep scientists call chronotypes. Rather than forcing yourself into a schedule that fights your biology, work with your natural rhythms. If you're naturally energetic at dawn, embrace early morning practices. If you function better with a slightly later start, adjust accordingly and focus on the quality of your routine rather than the specific hour it begins.</p>
+
+        <h3>Consider Your Environment</h3>
+        <p>Your physical space significantly impacts your morning experience. Assess your environment through the lens of sensory pleasure and functionality. Is your bedroom conducive to restful sleep and peaceful awakening? Is your bathroom organized for an efficient yet pleasant morning preparation? Do you have a comfortable space for contemplative practices?</p>
+
+        <p>Small adjustments—clearing clutter, adding plants, upgrading linens, curating pleasant scents, or improving lighting—can dramatically enhance your morning experience without requiring major renovations or expense.</p>
+
+        <h3>Prepare in Advance</h3>
+        <p>Reduce morning friction by thoughtfully preparing the evening before. Laying out clothing, preparing breakfast components, setting up coffee or tea equipment, and clearing work surfaces creates space for presence rather than scrambling. This advance consideration is itself a form of luxury—the gift of ease and flow to your future self.</p>
+
+        <h3>Build Gradually</h3>
+        <p>A common mistake is attempting to implement too many changes at once. Instead, begin with one or two elements that resonate most strongly with you, allowing them to become natural parts of your routine before adding more. This gradual approach builds sustainable habits rather than creating an overwhelming ideal that quickly collapses.</p>
+
+        <h3>Embrace Flexibility</h3>
+        <p>A truly luxurious routine has room for adaptation. Some mornings will allow for the full expression of your ideal practice, while others may require modification. Having versions of your routine for different circumstances—travel days, especially early meetings, or seasonal variations—allows you to maintain the essence of your practice even when the form must change.</p>
+
+        <h2>Sample Luxury Morning Routines</h2>
+        <p>To inspire your own practice, here are three variations of morning routines that incorporate the principles discussed:</p>
+
+        <h3>The Contemplative Morning (75 minutes)</h3>
+        <ul>
+          <li><strong>6:30 AM:</strong> Natural awakening with sunrise alarm, followed by a moment of gratitude practice while still in bed</li>
+          <li><strong>6:40 AM:</strong> Warm lemon water while opening curtains to welcome natural light</li>
+          <li><strong>6:45 AM:</strong> 20-minute meditation in a dedicated corner with minimal distractions</li>
+          <li><strong>7:05 AM:</strong> 15 minutes of gentle yoga focusing on breath and awakening the body</li>
+          <li><strong>7:20 AM:</strong> Shower ritual with aromatherapy elements</li>
+          <li><strong>7:35 AM:</strong> Preparation of a simple but beautiful breakfast of seasonal fruits, yogurt, and hand-toasted artisanal bread</li>
+          <li><strong>7:45 AM:</strong> Mindful enjoyment of breakfast while reading inspiring material</li>
+        </ul>
+
+        <h3>The Productive Morning (60 minutes)</h3>
+        <ul>
+          <li><strong>5:45 AM:</strong> Wake up, splash face with cool water, and dress in prepared workout clothes</li>
+          <li><strong>5:50 AM:</strong> Hydrate with electrolyte water while reviewing the day's top priorities</li>
+          <li><strong>6:00 AM:</strong> 30-minute higher intensity workout—running, strength training, or interval session</li>
+          <li><strong>6:30 AM:</strong> Quick shower followed by a 5-minute breathing practice</li>
+          <li><strong>6:40 AM:</strong> Preparation of pre-planned nutritious breakfast high in protein and healthy fats</li>
+          <li><strong>6:45 AM:</strong> Enjoy breakfast while listening to an educational podcast or audiobook</li>
+        </ul>
+
+        <h3>The Gentle Morning (90 minutes)</h3>
+        <ul>
+          <li><strong>7:00 AM:</strong> Natural awakening, followed by 10 minutes of gentle stretching in bed</li>
+          <li><strong>7:15 AM:</strong> Warm water with lemon and honey sipped while journaling three pages of free-flowing thoughts</li>
+          <li><strong>7:35 AM:</strong> 15-minute skincare ritual using products that delight the senses</li>
+          <li><strong>7:50 AM:</strong> Preparation of a beautiful breakfast to be enjoyed outdoors or by a window</li>
+          <li><strong>8:05 AM:</strong> Mindful breakfast followed by a short walk in nature</li>
+          <li><strong>8:30 AM:</strong> 10 minutes of planning the day ahead with intention</li>
+        </ul>
+
+        <h2>The Transformative Power of Morning Rituals</h2>
+        <p>A thoughtfully designed morning routine is one of the most accessible luxuries available to us. It requires no special status or extraordinary wealth—only the willingness to allocate time and attention to the beginning of each day. The cumulative effect of this daily practice extends far beyond the morning hours, influencing everything from productivity and stress resilience to overall life satisfaction.</p>
+
+        <p>By approaching your mornings with intention and care, you create a foundation of wellness and presence that supports everything else in your life. You transform necessary activities into meaningful rituals. You begin each day not from a place of reaction and scarcity, but from centeredness and abundance.</p>
+
+        <p>In a world that increasingly values authentic well-being over superficial displays of status, perhaps this is the truest expression of luxury: the ability to move through your days with intention, presence, and joy, beginning with those first precious hours of morning light.</p>
+        
+        <div class="divider"></div>
+      </div>
+      
+      <!-- Author Bio -->
+      <div class="luxury-card p-8 mt-12 flex items-center">
+        <div class="w-20 h-20 rounded-full overflow-hidden mr-6">
+          <img 
+            src="/images/team-emma.jpg" 
+            alt="Emma Wilson" 
+            class="object-cover w-full h-full"
+            onerror="this.src='https://placehold.co/300x300/F9F5EB/gold?text=E';this.onerror='';"
+          />
+        </div>
+        <div>
+          <h3 class="text-xl font-serif mb-2">Emma Wilson</h3>
+          <p class="text-mocha">Wellness expert and certified holistic health coach with a background in chronobiology. Emma's approach combines scientific research with practical lifestyle applications for optimal well-being.</p>
+        </div>
+      </div>
+      
+      <!-- Share -->
+      <div class="mt-12 text-center">
+        <h3 class="font-serif text-xl mb-4">Share This Article</h3>
+        <div class="flex justify-center space-x-4">
+          <a href="#" class="text-mocha hover:text-gold transition-colors">
+            <span class="sr-only">Pinterest</span>
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-instagram"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+          </a>
+          <a href="#" class="text-mocha hover:text-gold transition-colors">
+            <span class="sr-only">Twitter</span>
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-twitter"><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"></path></svg>
+          </a>
+          <a href="#" class="text-mocha hover:text-gold transition-colors">
+            <span class="sr-only">Facebook</span>
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-facebook"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </article>
+
+  <!-- Related Articles -->
+  <section class="py-16 bg-slate bg-opacity-30">
+    <div class="container-custom">
+      <div class="text-center mb-12">
+        <h2 class="mb-3">You May Also Enjoy</h2>
+        <div class="divider"></div>
+      </div>
+      
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <article class="luxury-card overflow-hidden group">
+          <div class="aspect-video overflow-hidden">
+            <img 
+              src="https://images.unsplash.com/photo-1541781774459-bb2af2f05b55?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80" 
+              alt="The Science of Quality Sleep" 
+              class="object-cover w-full h-full group-hover:scale-105 transition-transform duration-500"
+              onerror="this.src='https://placehold.co/600x400/F9F5EB/gold?text=Luxe+Blog';this.onerror='';"
+            />
+          </div>
+          <div class="p-6">
+            <h3 class="text-xl mb-3 font-serif group-hover:text-gold transition-colors">
+              <a href="/blog/science-of-quality-sleep">The Science of Quality Sleep</a>
+            </h3>
+            <p class="text-mocha mb-4">How to create the perfect sleep environment for rejuvenation and wellness.</p>
+            <a href="/blog/science-of-quality-sleep" class="text-gold font-medium hover:underline">Read Article</a>
+          </div>
+        </article>
+        
+        <article class="luxury-card overflow-hidden group">
+          <div class="aspect-video overflow-hidden">
+            <img 
+              src="https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80" 
+              alt="The Art of Luxury Living" 
+              class="object-cover w-full h-full group-hover:scale-105 transition-transform duration-500"
+              onerror="this.src='https://placehold.co/600x400/F9F5EB/gold?text=Luxe+Blog';this.onerror='';"
+            />
+          </div>
+          <div class="p-6">
+            <h3 class="text-xl mb-3 font-serif group-hover:text-gold transition-colors">
+              <a href="/blog/art-of-luxury-living">The Art of Luxury Living</a>
+            </h3>
+            <p class="text-mocha mb-4">Discover the principles of luxurious living and how to incorporate them into your everyday life.</p>
+            <a href="/blog/art-of-luxury-living" class="text-gold font-medium hover:underline">Read Article</a>
+          </div>
+        </article>
+        
+        <article class="luxury-card overflow-hidden group">
+          <div class="aspect-video overflow-hidden">
+            <img 
+              src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80" 
+              alt="Minimalist Luxury: Less is More" 
+              class="object-cover w-full h-full group-hover:scale-105 transition-transform duration-500"
+              onerror="this.src='https://placehold.co/600x400/F9F5EB/gold?text=Luxe+Blog';this.onerror='';"
+            />
+          </div>
+          <div class="p-6">
+            <h3 class="text-xl mb-3 font-serif group-hover:text-gold transition-colors">
+              <a href="/blog/minimalist-luxury">Minimalist Luxury: Less is More</a>
+            </h3>
+            <p class="text-mocha mb-4">How embracing minimalism can actually enhance your luxury experience.</p>
+            <a href="/blog/minimalist-luxury" class="text-gold font-medium hover:underline">Read Article</a>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+</MainLayout>

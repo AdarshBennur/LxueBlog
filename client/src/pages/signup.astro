@@ -1,0 +1,304 @@
+---
+import MainLayout from '../layouts/MainLayout.astro';
+---
+
+<MainLayout title="Sign Up" description="Join LuxeBlog to access premium content, exclusive insights, and a world of refined living." currentPage="signup">
+  <!-- Signup Form Section -->
+  <section class="py-20 bg-gradient-to-b from-cream/30 to-rose/10 min-h-screen flex items-center">
+    <div class="container-custom">
+      <div class="max-w-lg mx-auto">
+        <!-- Signup Card -->
+        <div class="luxury-card p-10 shadow-xl border border-gold/20">
+          <div class="text-center mb-8">
+            <h1 class="text-4xl font-serif mb-4 text-charcoal">Join LuxeBlog</h1>
+            <div class="w-16 h-px bg-gold mx-auto mb-4"></div>
+            <p class="text-mocha/95 font-light">Create your account and discover a world of refined elegance</p>
+          </div>
+
+          <!-- Signup Form -->
+          <form id="signupForm" class="space-y-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label for="firstName" class="block text-sm font-medium text-charcoal mb-2">First Name</label>
+                <input 
+                  type="text" 
+                  id="firstName"
+                  name="firstName"
+                  required
+                  class="w-full px-4 py-3 border border-sand/50 rounded-sm focus:border-gold focus:ring-1 focus:ring-gold/20 bg-white/80 backdrop-blur-sm transition-all duration-300"
+                  placeholder="First name"
+                />
+              </div>
+              <div>
+                <label for="lastName" class="block text-sm font-medium text-charcoal mb-2">Last Name</label>
+                <input 
+                  type="text" 
+                  id="lastName"
+                  name="lastName"
+                  required
+                  class="w-full px-4 py-3 border border-sand/50 rounded-sm focus:border-gold focus:ring-1 focus:ring-gold/20 bg-white/80 backdrop-blur-sm transition-all duration-300"
+                  placeholder="Last name"
+                />
+              </div>
+            </div>
+
+            <div>
+              <label for="email" class="block text-sm font-medium text-charcoal mb-2">Email Address</label>
+              <input 
+                type="email" 
+                id="email"
+                name="email"
+                required
+                class="w-full px-4 py-3 border border-sand/50 rounded-sm focus:border-gold focus:ring-1 focus:ring-gold/20 bg-white/80 backdrop-blur-sm transition-all duration-300"
+                placeholder="Enter your email"
+              />
+            </div>
+
+            <div>
+              <label for="password" class="block text-sm font-medium text-charcoal mb-2">Password</label>
+              <div class="relative">
+                <input 
+                  type="password" 
+                  id="password"
+                  name="password"
+                  required
+                  class="w-full px-4 py-3 pr-12 border border-sand/50 rounded-sm focus:border-gold focus:ring-1 focus:ring-gold/20 bg-white/80 backdrop-blur-sm transition-all duration-300"
+                  placeholder="Create a password"
+                />
+                <button 
+                  type="button" 
+                  class="absolute inset-y-0 right-0 pr-3 flex items-center text-mocha/60 hover:text-mocha transition-colors"
+                  onclick="togglePasswordVisibility('password')"
+                >
+                  <!-- Eye open icon (show password) -->
+                  <svg id="password-eye-open" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                  </svg>
+                  <!-- Eye closed icon (hide password) -->
+                  <svg id="password-eye-closed" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M3.98 8.223A10.477 10.477 0 001.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.45 10.45 0 0112 4.5c4.756 0 8.773 3.162 10.065 7.498a10.523 10.523 0 01-4.293 5.774M6.228 6.228L3 3m3.228 3.228l3.65 3.65m7.894 7.894L21 21m-3.228-3.228l-3.65-3.65m0 0a3 3 0 11-4.243-4.243m4.242 4.242L9.88 9.88" />
+                  </svg>
+                </button>
+              </div>
+              <p class="text-xs text-mocha/70 mt-1">Must be at least 8 characters with uppercase, lowercase, and numbers</p>
+            </div>
+
+            <div>
+              <label for="confirmPassword" class="block text-sm font-medium text-charcoal mb-2">Confirm Password</label>
+              <div class="relative">
+                <input 
+                  type="password" 
+                  id="confirmPassword"
+                  name="confirmPassword"
+                  required
+                  class="w-full px-4 py-3 pr-12 border border-sand/50 rounded-sm focus:border-gold focus:ring-1 focus:ring-gold/20 bg-white/80 backdrop-blur-sm transition-all duration-300"
+                  placeholder="Confirm your password"
+                />
+                <button 
+                  type="button" 
+                  class="absolute inset-y-0 right-0 pr-3 flex items-center text-mocha/60 hover:text-mocha transition-colors"
+                  onclick="togglePasswordVisibility('confirmPassword')"
+                >
+                  <!-- Eye open icon (show password) -->
+                  <svg id="confirmPassword-eye-open" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                  </svg>
+                  <!-- Eye closed icon (hide password) -->
+                  <svg id="confirmPassword-eye-closed" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M3.98 8.223A10.477 10.477 0 001.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.45 10.45 0 0112 4.5c4.756 0 8.773 3.162 10.065 7.498a10.523 10.523 0 01-4.293 5.774M6.228 6.228L3 3m3.228 3.228l3.65 3.65m7.894 7.894L21 21m-3.228-3.228l-3.65-3.65m0 0a3 3 0 11-4.243-4.243m4.242 4.242L9.88 9.88" />
+                  </svg>
+                </button>
+              </div>
+            </div>
+
+            <!-- Membership Type Selection -->
+            <div>
+              <label class="block text-sm font-medium text-charcoal mb-3">Choose Your Membership</label>
+              <div class="space-y-3">
+                <label class="flex items-center p-3 border border-sand/30 rounded-sm hover:border-gold/50 transition-colors cursor-pointer">
+                  <input type="radio" name="membership" value="free" class="text-gold focus:ring-gold/20" checked>
+                  <div class="ml-3 flex-1">
+                    <div class="flex justify-between items-center">
+                      <span class="font-medium text-charcoal">Free Tier</span>
+                      <span class="text-gold font-serif">Free</span>
+                    </div>
+                    <p class="text-xs text-mocha/80">Access to select articles and monthly newsletter</p>
+                  </div>
+                </label>
+                
+                <label class="flex items-center p-3 border border-sand/30 rounded-sm hover:border-gold/50 transition-colors cursor-pointer">
+                  <input type="radio" name="membership" value="essential" class="text-gold focus:ring-gold/20">
+                  <div class="ml-3 flex-1">
+                    <div class="flex justify-between items-center">
+                      <span class="font-medium text-charcoal">Essential</span>
+                      <span class="text-gold font-serif">$5/month</span>
+                    </div>
+                    <p class="text-xs text-mocha/80">Access to all articles and weekly newsletter</p>
+                  </div>
+                </label>
+                
+                <label class="flex items-center p-3 border border-gold/30 rounded-sm hover:border-gold/50 transition-colors cursor-pointer bg-gold/5">
+                  <input type="radio" name="membership" value="premium" class="text-gold focus:ring-gold/20">
+                  <div class="ml-3 flex-1">
+                    <div class="flex justify-between items-center">
+                      <span class="font-medium text-charcoal">Premium</span>
+                      <span class="text-gold font-serif">$12/month</span>
+                    </div>
+                    <p class="text-xs text-mocha/80">Everything in Essential + exclusive content & magazine</p>
+                  </div>
+                  <span class="bg-gold text-white text-xs px-2 py-1 rounded-sm">Popular</span>
+                </label>
+                
+                <label class="flex items-center p-3 border border-sand/30 rounded-sm hover:border-gold/50 transition-colors cursor-pointer">
+                  <input type="radio" name="membership" value="elite" class="text-gold focus:ring-gold/20">
+                  <div class="ml-3 flex-1">
+                    <div class="flex justify-between items-center">
+                      <span class="font-medium text-charcoal">Elite</span>
+                      <span class="text-gold font-serif">$25/month</span>
+                    </div>
+                    <p class="text-xs text-mocha/80">Premium + consultations & exclusive events</p>
+                  </div>
+                </label>
+              </div>
+            </div>
+
+            <!-- Terms and Conditions -->
+            <div class="flex items-start">
+              <input type="checkbox" required class="mt-1 rounded border-sand text-gold focus:ring-gold/20">
+              <span class="ml-2 text-sm text-mocha/85">
+                I agree to the <a href="/terms" class="text-gold hover:text-gold/80 transition-colors">Terms of Service</a> 
+                and <a href="/privacy" class="text-gold hover:text-gold/80 transition-colors">Privacy Policy</a>
+              </span>
+            </div>
+
+            <button 
+              type="submit" 
+              class="w-full bg-gold hover:bg-gold/90 text-white font-medium py-3 px-6 rounded-sm transition-all duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
+            >
+              Create Account
+            </button>
+          </form>
+
+          <!-- Divider -->
+          <div class="my-8 flex items-center">
+            <div class="flex-1 h-px bg-sand/50"></div>
+            <span class="px-4 text-sm text-mocha/70 font-light">or</span>
+            <div class="flex-1 h-px bg-sand/50"></div>
+          </div>
+
+          <!-- Social Signup -->
+          <div class="space-y-3">
+            <button class="w-full bg-white border border-sand/50 hover:border-gold/50 text-charcoal font-medium py-3 px-6 rounded-sm transition-all duration-300 flex items-center justify-center">
+              <svg class="w-5 h-5 mr-3" viewBox="0 0 24 24">
+                <path fill="currentColor" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                <path fill="currentColor" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                <path fill="currentColor" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+                <path fill="currentColor" d="M12 1c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+              </svg>
+              Sign up with Google
+            </button>
+          </div>
+
+          <!-- Login Link -->
+          <div class="text-center mt-8">
+            <p class="text-mocha/85">
+              Already have an account? 
+              <a href="/login" class="text-gold hover:text-gold/80 font-medium transition-colors">
+                Sign in here
+              </a>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    // Toggle password visibility function
+    window.togglePasswordVisibility = function(fieldId) {
+      console.log('Toggling visibility for:', fieldId);
+      const passwordField = document.getElementById(fieldId);
+      const eyeClosed = document.getElementById(fieldId + '-eye-closed');
+      const eyeOpen = document.getElementById(fieldId + '-eye-open');
+      
+      console.log('Elements found:', {
+        passwordField: passwordField,
+        eyeClosed: eyeClosed,
+        eyeOpen: eyeOpen
+      });
+      
+      if (passwordField && eyeClosed && eyeOpen) {
+        if (passwordField.type === 'password') {
+          // Show password
+          passwordField.type = 'text';
+          eyeClosed.classList.add('hidden');
+          eyeOpen.classList.remove('hidden');
+          console.log('Password shown');
+        } else {
+          // Hide password
+          passwordField.type = 'password';
+          eyeClosed.classList.remove('hidden');
+          eyeOpen.classList.add('hidden');
+          console.log('Password hidden');
+        }
+      } else {
+        console.error('Could not find required elements for', fieldId);
+      }
+    }
+    
+    // Handle form submission
+    document.getElementById('signupForm')?.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const formData = new FormData(e.target as HTMLFormElement);
+      const userData = {
+        firstName: formData.get('firstName'),
+        lastName: formData.get('lastName'),
+        email: formData.get('email'),
+        password: formData.get('password'),
+        confirmPassword: formData.get('confirmPassword'),
+        membership: formData.get('membership')
+      };
+      
+      // Basic validation
+      if (userData.password !== userData.confirmPassword) {
+        alert('Passwords do not match!');
+        return;
+      }
+      
+      try {
+        const response = await fetch('http://localhost:3001/api/auth/register', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(userData)
+        });
+        
+        const result = await response.json();
+        
+        if (result.success) {
+          // Store token
+          localStorage.setItem('token', result.token);
+          localStorage.setItem('user', JSON.stringify(result.user));
+          
+          // Update authentication state
+          if (window.updateAuthState) {
+            window.updateAuthState();
+          }
+          
+          alert('Account created successfully! Welcome to LuxeBlog!');
+          // Redirect to home page
+          window.location.href = '/home';
+        } else {
+          alert('Error: ' + result.message);
+        }
+      } catch (error) {
+        console.error('Signup error:', error);
+        alert('An error occurred. Please try again.');
+      }
+    });
+  </script>
+</MainLayout>

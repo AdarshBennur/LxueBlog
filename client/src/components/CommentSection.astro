@@ -1,0 +1,568 @@
+---
+// CommentSection.astro - Reusable comment system component
+export interface Props {
+  postId: string;
+  className?: string;
+}
+
+const { postId, className = '' } = Astro.props;
+---
+
+<div class={`comment-section ${className}`}>
+  <!-- Comments Header -->
+  <div class="comments-header mb-8">
+    <h3 class="text-2xl font-serif text-charcoal mb-2">Comments</h3>
+    <div class="w-16 h-px bg-gold"></div>
+  </div>
+
+  <!-- Comments List -->
+  <div id="commentsList" class="comments-list mb-8 space-y-6">
+    <!-- Comments will be loaded here dynamically -->
+  </div>
+
+  <!-- Add Comment Form -->
+  <div class="add-comment-form">
+    <div class="bg-sand/20 rounded-lg p-6">
+      <h4 class="text-lg font-medium text-charcoal mb-4">Leave a Comment</h4>
+      
+      <!-- Guest User Form (shown by default) -->
+      <form id="guestCommentForm" class="space-y-4">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label for="guestName" class="block text-sm font-medium text-charcoal mb-2">Name *</label>
+            <input 
+              type="text" 
+              id="guestName" 
+              name="guestName" 
+              required 
+              class="w-full px-4 py-3 border border-sand/30 rounded-sm focus:outline-none focus:ring-2 focus:ring-gold focus:border-transparent bg-white text-charcoal"
+              placeholder="Your name"
+            />
+          </div>
+          <div>
+            <label for="guestEmail" class="block text-sm font-medium text-charcoal mb-2">Email *</label>
+            <input 
+              type="email" 
+              id="guestEmail" 
+              name="guestEmail" 
+              required 
+              class="w-full px-4 py-3 border border-sand/30 rounded-sm focus:outline-none focus:ring-2 focus:ring-gold focus:border-transparent bg-white text-charcoal"
+              placeholder="your@email.com"
+            />
+          </div>
+        </div>
+        <div>
+          <label for="commentContent" class="block text-sm font-medium text-charcoal mb-2">Comment *</label>
+          <textarea 
+            id="commentContent" 
+            name="content" 
+            required 
+            rows="4"
+            class="w-full px-4 py-3 border border-sand/30 rounded-sm focus:outline-none focus:ring-2 focus:ring-gold focus:border-transparent bg-white text-charcoal resize-none"
+            placeholder="Share your thoughts..."
+          ></textarea>
+        </div>
+        <div class="flex items-center justify-between">
+          <p class="text-sm text-mocha/70">
+            Your comment will be reviewed before being published.
+          </p>
+          <button 
+            type="submit" 
+            class="bg-gold hover:bg-gold/90 text-white px-6 py-3 rounded-sm transition-colors font-medium"
+          >
+            Post Comment
+          </button>
+        </div>
+      </form>
+
+      <!-- Authenticated User Form (hidden by default) -->
+      <form id="userCommentForm" class="space-y-4 hidden">
+        <div>
+          <label for="userCommentContent" class="block text-sm font-medium text-charcoal mb-2">Comment *</label>
+          <textarea 
+            id="userCommentContent" 
+            name="content" 
+            required 
+            rows="4"
+            class="w-full px-4 py-3 border border-sand/30 rounded-sm focus:outline-none focus:ring-2 focus:ring-gold focus:border-transparent bg-white text-charcoal resize-none"
+            placeholder="Share your thoughts..."
+          ></textarea>
+        </div>
+        <div class="flex items-center justify-between">
+          <p class="text-sm text-mocha/70">
+            <span id="userCommentStatus"></span>
+          </p>
+          <button 
+            type="submit" 
+            class="bg-gold hover:bg-gold/90 text-white px-6 py-3 rounded-sm transition-colors font-medium"
+          >
+            Post Comment
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Error/Success Messages -->
+  <div id="commentMessages" class="mt-4"></div>
+</div>
+
+<script define:vars={{ postId }}>
+  import { getAuthState } from '../lib/auth.ts';
+  import { commentsAPI } from '../lib/api.ts';
+
+  class CommentSection {
+    constructor(postId) {
+      this.postId = postId;
+      this.comments = [];
+      this.isLoading = false;
+      this.hasLoaded = false; // Track if we've attempted to load comments
+      this.loadTimeout = null; // Track timeout for API calls
+      this.init();
+    }
+
+    async init() {
+      console.log('🔄 Initializing comment section for post:', this.postId);
+      
+      // Check authentication status
+      this.checkAuthStatus();
+      
+      // Load existing comments
+      await this.loadComments();
+      
+      // Setup form handlers
+      this.setupFormHandlers();
+    }
+
+    checkAuthStatus() {
+      const authState = getAuthState();
+      
+      if (authState.isAuthenticated) {
+        console.log('👤 User is authenticated:', authState.user.name);
+        this.showUserForm(authState.user);
+      } else {
+        console.log('👤 User is not authenticated, showing guest form');
+        this.showGuestForm();
+      }
+    }
+
+    showUserForm(user) {
+      // Hide guest form, show user form
+      document.getElementById('guestCommentForm').classList.add('hidden');
+      document.getElementById('userCommentForm').classList.remove('hidden');
+      
+      // Update user status message
+      const statusElement = document.getElementById('userCommentStatus');
+      if (user.role === 'admin' || user.role === 'author') {
+        statusElement.textContent = 'Your comment will be published immediately.';
+        statusElement.className = 'text-sm text-green-600';
+      } else {
+        statusElement.textContent = 'Your comment will be reviewed before being published.';
+        statusElement.className = 'text-sm text-mocha/70';
+      }
+    }
+
+    showGuestForm() {
+      // Show guest form, hide user form
+      document.getElementById('guestCommentForm').classList.remove('hidden');
+      document.getElementById('userCommentForm').classList.add('hidden');
+    }
+
+    async loadComments() {
+      // Prevent multiple simultaneous requests
+      if (this.isLoading) return;
+      
+      this.isLoading = true;
+      this.hasLoaded = true;
+      
+      // Clear any existing timeout
+      if (this.loadTimeout) {
+        clearTimeout(this.loadTimeout);
+      }
+      
+      // Show loading state immediately
+      this.showLoadingState();
+      
+      try {
+        console.log('📡 Loading comments for post:', this.postId);
+        
+        // Set up timeout for API call (5 seconds)
+        const timeoutPromise = new Promise((_, reject) => {
+          this.loadTimeout = setTimeout(() => {
+            reject(new Error('Request timeout - please check your connection'));
+          }, 5000);
+        });
+        
+        // Race between API call and timeout
+        const response = await Promise.race([
+          commentsAPI.getCommentsByPost(this.postId),
+          timeoutPromise
+        ]);
+        
+        // Clear timeout since we got a response
+        if (this.loadTimeout) {
+          clearTimeout(this.loadTimeout);
+          this.loadTimeout = null;
+        }
+        
+        if (response.data.success) {
+          this.comments = response.data.data || [];
+          this.renderComments();
+        } else {
+          throw new Error(response.data.message || 'Failed to load comments');
+        }
+      } catch (error) {
+        console.error('❌ Error loading comments:', error);
+        this.showErrorState(error.message || 'Unable to load comments. Please try again later.');
+      } finally {
+        this.isLoading = false;
+      }
+    }
+
+    // Show loading state with spinner
+    showLoadingState() {
+      const commentsList = document.getElementById('commentsList');
+      commentsList.innerHTML = `
+        <div class="text-center py-8">
+          <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-gold mx-auto mb-4"></div>
+          <p class="text-mocha">Loading comments...</p>
+        </div>
+      `;
+    }
+
+    // Show error state with retry option
+    showErrorState(message) {
+      const commentsList = document.getElementById('commentsList');
+      commentsList.innerHTML = `
+        <div class="text-center py-8">
+          <svg class="w-12 h-12 text-red-400 mx-auto mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
+          </svg>
+          <p class="text-red-600 mb-4">${message}</p>
+          <button 
+            onclick="window.commentSection?.loadComments()" 
+            class="bg-gold hover:bg-gold/90 text-white px-4 py-2 rounded-sm transition-colors font-medium"
+          >
+            Try Again
+          </button>
+        </div>
+      `;
+    }
+
+    // Show no comments state
+    showNoCommentsState() {
+      const commentsList = document.getElementById('commentsList');
+      commentsList.innerHTML = `
+        <div class="text-center py-8">
+          <svg class="w-12 h-12 text-mocha/40 mx-auto mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+          </svg>
+          <p class="text-mocha/70">No comments yet for this article. Be the first to comment!</p>
+        </div>
+      `;
+    }
+
+    renderComments() {
+      const commentsList = document.getElementById('commentsList');
+      
+      // Always clear loading state first
+      if (this.comments.length === 0) {
+        this.showNoCommentsState();
+        return;
+      }
+
+      // Render comments if we have them
+      const commentsHTML = this.comments.map(comment => this.renderComment(comment)).join('');
+      commentsList.innerHTML = commentsHTML;
+    }
+
+    renderComment(comment) {
+      const date = new Date(comment.createdAt).toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+      });
+
+      const displayName = comment.isGuest ? comment.guestName : (comment.user?.name || 'Anonymous');
+      const displayAvatar = comment.isGuest ? 
+        `https://ui-avatars.com/api/?name=${encodeURIComponent(comment.guestName)}&background=random&color=fff&size=40` :
+        (comment.user?.avatar || 'default-avatar.jpg');
+
+      return `
+        <div class="comment-item bg-white rounded-lg p-6 shadow-sm border border-sand/20">
+          <div class="flex items-start space-x-4">
+            <div class="flex-shrink-0">
+              <img 
+                src="${displayAvatar}" 
+                alt="${displayName}" 
+                class="w-10 h-10 rounded-full object-cover"
+                onerror="this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(displayName)}&background=random&color=fff&size=40'"
+              />
+            </div>
+            <div class="flex-1 min-w-0">
+              <div class="flex items-center space-x-2 mb-2">
+                <h5 class="text-sm font-medium text-charcoal">${displayName}</h5>
+                ${comment.isGuest ? '<span class="guest-badge">Guest</span>' : ''}
+                <span class="text-xs text-mocha/60">${date}</span>
+              </div>
+              <div class="text-charcoal leading-relaxed">
+                ${this.escapeHtml(comment.content)}
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    setupFormHandlers() {
+      // Guest form handler
+      document.getElementById('guestCommentForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        await this.submitComment('guest');
+      });
+
+      // User form handler
+      document.getElementById('userCommentForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        await this.submitComment('user');
+      });
+    }
+
+    async submitComment(type) {
+      const form = type === 'guest' ? 
+        document.getElementById('guestCommentForm') : 
+        document.getElementById('userCommentForm');
+      
+      const formData = new FormData(form);
+      const content = formData.get('content').trim();
+      
+      if (!content) {
+        this.showError('Please enter a comment.');
+        return;
+      }
+
+      const submitButton = form.querySelector('button[type="submit"]');
+      const originalText = submitButton.textContent;
+      submitButton.textContent = 'Posting...';
+      submitButton.disabled = true;
+
+      try {
+        const commentData = {
+          content,
+          postId: this.postId
+        };
+
+        if (type === 'guest') {
+          const guestName = formData.get('guestName').trim();
+          const guestEmail = formData.get('guestEmail').trim();
+          
+          if (!guestName || !guestEmail) {
+            throw new Error('Name and email are required.');
+          }
+          
+          commentData.guestName = guestName;
+          commentData.guestEmail = guestEmail;
+        }
+
+        console.log('📤 Submitting comment:', commentData);
+        const response = await commentsAPI.addComment(commentData);
+        
+        if (response.data.success) {
+          this.showSuccess(response.data.message || 'Comment submitted successfully!');
+          form.reset();
+          
+          // Reload comments to show the new one (if approved)
+          await this.loadComments();
+        } else {
+          throw new Error(response.data.message || 'Failed to submit comment');
+        }
+      } catch (error) {
+        console.error('❌ Error submitting comment:', error);
+        this.showError(error.message || 'Failed to submit comment. Please try again.');
+      } finally {
+        submitButton.textContent = originalText;
+        submitButton.disabled = false;
+      }
+    }
+
+    showError(message) {
+      this.showMessage(message, 'error');
+    }
+
+    showSuccess(message) {
+      this.showMessage(message, 'success');
+    }
+
+    showMessage(message, type) {
+      const messagesContainer = document.getElementById('commentMessages');
+      const messageClass = type === 'error' ? 'bg-red-50 border-red-200 text-red-800' : 'bg-green-50 border-green-200 text-green-800';
+      
+      messagesContainer.innerHTML = `
+        <div class="comment-message border ${messageClass}">
+          <p class="text-sm">${message}</p>
+        </div>
+      `;
+      
+      // Auto-hide success messages after 5 seconds
+      if (type === 'success') {
+        setTimeout(() => {
+          messagesContainer.innerHTML = '';
+        }, 5000);
+      }
+    }
+
+    escapeHtml(text) {
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+  }
+
+  // Initialize comment section when DOM is ready
+  document.addEventListener('DOMContentLoaded', () => {
+    const commentSection = new CommentSection(postId);
+    
+    // Expose globally for retry functionality
+    window.commentSection = commentSection;
+    
+    // Listen for postId updates from the article page
+    document.addEventListener('updatePostId', (event) => {
+      console.log('🔄 Updating comment section postId:', event.detail.postId);
+      commentSection.postId = event.detail.postId;
+      commentSection.loadComments();
+    });
+    
+    // Cleanup on page unload
+    window.addEventListener('beforeunload', () => {
+      if (commentSection.loadTimeout) {
+        clearTimeout(commentSection.loadTimeout);
+      }
+    });
+  });
+</script>
+
+<style>
+  .comment-section {
+    max-width: 100%;
+  }
+  
+  .comment-item {
+    transition: all 0.3s ease;
+    border: 1px solid #E5DCC5;
+  }
+  
+  .comment-item:hover {
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+    transform: translateY(-2px);
+  }
+  
+  .comments-list {
+    max-height: 600px;
+    overflow-y: auto;
+  }
+  
+  /* Custom scrollbar matching site theme */
+  .comments-list::-webkit-scrollbar {
+    width: 6px;
+  }
+  
+  .comments-list::-webkit-scrollbar-track {
+    background: #F9F5EB;
+    border-radius: 3px;
+  }
+  
+  .comments-list::-webkit-scrollbar-thumb {
+    background: #D4B483;
+    border-radius: 3px;
+  }
+  
+  .comments-list::-webkit-scrollbar-thumb:hover {
+    background: #C1A78E;
+  }
+  
+  /* Form styling to match site theme */
+  .add-comment-form input,
+  .add-comment-form textarea {
+    border: 1px solid #E5DCC5;
+    transition: all 0.3s ease;
+  }
+  
+  .add-comment-form input:focus,
+  .add-comment-form textarea:focus {
+    border-color: #D4B483;
+    box-shadow: 0 0 0 3px rgba(212, 180, 131, 0.1);
+  }
+  
+  /* Button styling */
+  .add-comment-form button {
+    transition: all 0.3s ease;
+  }
+  
+  .add-comment-form button:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(212, 180, 131, 0.3);
+  }
+  
+  .add-comment-form button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+  }
+  
+  /* Loading animation */
+  @keyframes spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  
+  .animate-spin {
+    animation: spin 1s linear infinite;
+  }
+  
+  /* Guest badge styling */
+  .guest-badge {
+    background: linear-gradient(135deg, #E5DCC5, #F6E6E4);
+    color: #7D6E5B;
+    font-size: 0.75rem;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+    font-weight: 500;
+  }
+  
+  /* Message styling */
+  .comment-message {
+    border-radius: 0.5rem;
+    padding: 1rem;
+    margin-top: 1rem;
+    animation: slideIn 0.3s ease;
+  }
+  
+  @keyframes slideIn {
+    from {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .comment-item {
+      padding: 1rem;
+    }
+    
+    .add-comment-form {
+      padding: 1rem;
+    }
+    
+    .comments-list {
+      max-height: 400px;
+    }
+  }
+</style>

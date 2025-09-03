@@ -1,0 +1,593 @@
+---
+import MainLayout from '../layouts/MainLayout.astro';
+---
+
+<MainLayout title="My Profile" description="Manage your LuxeBlog profile and personal information" currentPage="profile">
+  <section class="py-16 bg-gradient-to-br from-sand/30 to-white min-h-screen">
+    <div class="container-custom max-w-6xl">
+      <!-- Page Header -->
+      <div class="text-center mb-12">
+        <h1 class="text-4xl font-serif mb-4 text-charcoal">My Profile</h1>
+        <div class="w-16 h-px bg-gold mx-auto mb-4"></div>
+        <p class="text-mocha/95 font-light">Manage your personal information and preferences</p>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-5 gap-10">
+        <!-- Profile Overview Card -->
+        <div class="lg:col-span-1">
+          <div class="bg-white/80 backdrop-blur-sm border border-sand/30 rounded-lg p-6 shadow-sm h-fit">
+            <!-- Profile Avatar -->
+            <div class="text-center mb-6">
+              <div class="w-24 h-24 rounded-full bg-gradient-to-br from-gold/20 to-sand/30 flex items-center justify-center mx-auto mb-4 overflow-hidden" id="avatarContainer">
+                <img id="profileAvatar" class="w-full h-full object-cover hidden" alt="Profile Avatar" />
+                <svg id="defaultAvatar" class="w-12 h-12 text-gold" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                </svg>
+              </div>
+              <button type="button" id="changeAvatarBtn" class="flex items-center justify-center gap-2 px-4 py-2 text-sm text-charcoal bg-white hover:bg-gold/10 border border-gold/30 rounded-sm font-serif transition-all duration-300 shadow-sm hover:shadow mx-auto">
+                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                </svg>
+                Edit
+              </button>
+              <input type="file" id="avatarInput" accept="image/*" class="hidden" />
+            </div>
+
+            <!-- User Stats -->
+            <div class="space-y-4">
+              <div class="text-center p-4 bg-sand/10 rounded-lg">
+                <div class="text-lg font-serif text-charcoal" id="memberSince">Member Since</div>
+                <div class="text-sm text-mocha/70" id="joinDate">Loading...</div>
+              </div>
+              
+              <div class="grid grid-cols-1 gap-3">
+                <div class="text-center p-3 bg-white/50 rounded-lg">
+                  <div class="text-lg font-medium text-charcoal">0</div>
+                  <div class="text-xs text-mocha/70">Articles</div>
+                </div>
+                <div class="text-center p-3 bg-white/50 rounded-lg">
+                  <div class="text-lg font-medium text-charcoal">0</div>
+                  <div class="text-xs text-mocha/70">Comments</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Profile Information Form -->
+        <div class="lg:col-span-4">
+          <div class="bg-white/80 backdrop-blur-sm border border-sand/30 rounded-lg p-10 shadow-sm">
+            <h2 class="text-2xl font-serif mb-8 text-charcoal">Personal Information</h2>
+            
+            <form id="profileForm" class="space-y-8">
+              <!-- Basic Information Section -->
+              <div class="border-b border-sand/30 pb-8">
+                <h3 class="text-xl font-serif mb-6 text-charcoal">Basic Information</h3>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
+                    <label for="firstName" class="block text-charcoal mb-3">First Name</label>
+                    <input 
+                      type="text" 
+                      id="firstName" 
+                      name="firstName" 
+                      class="w-full px-5 py-4 border border-sand focus:border-gold focus:ring-1 focus:ring-gold/20 rounded-sm bg-white/70 backdrop-blur-sm"
+                    >
+                  </div>
+                  <div>
+                    <label for="lastName" class="block text-charcoal mb-3">Last Name</label>
+                    <input 
+                      type="text" 
+                      id="lastName" 
+                      name="lastName" 
+                      class="w-full px-5 py-4 border border-sand focus:border-gold focus:ring-1 focus:ring-gold/20 rounded-sm bg-white/70 backdrop-blur-sm"
+                    >
+                  </div>
+                </div>
+                
+                <div class="mt-6">
+                  <label for="email" class="block text-charcoal mb-3">Email Address</label>
+                  <input 
+                    type="email" 
+                    id="email" 
+                    name="email" 
+                    class="w-full px-5 py-4 border border-sand focus:border-gold focus:ring-1 focus:ring-gold/20 rounded-sm bg-white/70 backdrop-blur-sm bg-sand/10"
+                    disabled
+                  >
+                  <p class="text-xs text-mocha/70 mt-2">Email address cannot be modified</p>
+                </div>
+                
+                <div class="mt-6">
+                  <label for="bio" class="block text-charcoal mb-3">Biography</label>
+                  <textarea 
+                    id="bio" 
+                    name="bio" 
+                    rows="5" 
+                    class="w-full px-5 py-4 border border-sand focus:border-gold focus:ring-1 focus:ring-gold/20 rounded-sm bg-white/70 backdrop-blur-sm"
+                    placeholder="Tell us about yourself..."
+                  ></textarea>
+                </div>
+              </div>
+              
+              <!-- Social Media Section -->
+              <div class="border-b border-sand/30 pb-8">
+                <h3 class="text-xl font-serif mb-6 text-charcoal">Social Media</h3>
+                
+                <div class="space-y-6">
+                  <div>
+                    <label for="website" class="block text-charcoal mb-3">Website</label>
+                    <input 
+                      type="url" 
+                      id="website" 
+                      name="website" 
+                      class="w-full px-5 py-4 border border-sand focus:border-gold focus:ring-1 focus:ring-gold/20 rounded-sm bg-white/70 backdrop-blur-sm"
+                      placeholder="https://yourwebsite.com"
+                    >
+                  </div>
+                  <div>
+                    <label for="twitter" class="block text-charcoal mb-3">Twitter</label>
+                    <input 
+                      type="text" 
+                      id="twitter" 
+                      name="twitter" 
+                      class="w-full px-5 py-4 border border-sand focus:border-gold focus:ring-1 focus:ring-gold/20 rounded-sm bg-white/70 backdrop-blur-sm"
+                      placeholder="@username"
+                    >
+                  </div>
+                  <div>
+                    <label for="linkedin" class="block text-charcoal mb-3">LinkedIn</label>
+                    <input 
+                      type="text" 
+                      id="linkedin" 
+                      name="linkedin" 
+                      class="w-full px-5 py-4 border border-sand focus:border-gold focus:ring-1 focus:ring-gold/20 rounded-sm bg-white/70 backdrop-blur-sm"
+                      placeholder="linkedin.com/in/username"
+                    >
+                  </div>
+                </div>
+              </div>
+              
+              <!-- Membership Section -->
+              <div>
+                <h3 class="text-xl font-serif mb-6 text-charcoal">Membership</h3>
+                
+                <div class="bg-sand/10 p-6 rounded-sm mb-6">
+                  <div class="flex items-center justify-between">
+                    <div>
+                      <p class="text-lg font-medium text-charcoal" id="currentMembership">Current Plan: Free Tier</p>
+                      <p class="text-sm text-mocha/70 mt-1">Upgrade to access premium features and exclusive content</p>
+                    </div>
+                    <a href="#" class="bg-gold hover:bg-gold/90 text-white px-6 py-3 rounded-sm font-medium transition-colors">
+                      Upgrade
+                    </a>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="flex justify-end space-x-4">
+                <button type="button" id="resetBtn" class="px-6 py-3 border border-sand hover:border-charcoal/50 rounded-sm transition-colors">
+                  Reset
+                </button>
+                <button type="submit" class="bg-gold hover:bg-gold/90 text-white px-8 py-3 rounded-sm font-medium transition-colors">
+                  Save Changes
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Advanced Avatar Upload Modal with Zoom/Crop -->
+  <div id="avatarModal" class="fixed inset-0 bg-black/70 flex items-center justify-center z-50 hidden">
+    <div class="bg-white rounded-lg w-full max-w-md p-6 relative">
+      <button type="button" id="closeModal" class="absolute top-4 right-4 text-mocha/60 hover:text-mocha">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+        </svg>
+      </button>
+      
+      <h3 class="text-xl font-serif mb-6">Edit Profile Picture</h3>
+      
+      <!-- Advanced circular preview with crop/zoom -->
+      <div class="flex flex-col items-center mb-6">
+        <!-- Avatar editor container -->
+        <div class="w-64 h-64 bg-slate/10 rounded-lg mb-4 flex items-center justify-center relative">
+          <!-- Circular crop area -->
+          <div class="w-48 h-48 rounded-full border-2 border-dashed border-gold/50 overflow-hidden relative">
+            <!-- Image container that can be moved and zoomed -->
+            <div id="imageContainer" class="absolute inset-0 flex items-center justify-center">
+              <img id="previewImage" class="max-w-none" style="display: none; transform-origin: center;" alt="Preview" />
+            </div>
+          </div>
+        </div>
+        
+        <!-- Controls -->
+        <div class="w-full space-y-4">
+          <!-- Zoom slider -->
+          <div class="flex items-center justify-center mb-2">
+            <span class="text-sm text-mocha/80 mr-3">Zoom:</span>
+            <input type="range" id="zoomSlider" min="100" max="300" value="100" class="w-full max-w-xs" disabled>
+          </div>
+          
+          <!-- Image upload button -->
+          <div class="flex justify-center">
+            <label for="fileInput" class="cursor-pointer bg-sand/20 hover:bg-sand/30 text-charcoal px-4 py-2 rounded-sm transition-colors">
+              Choose Image
+            </label>
+            <input type="file" id="fileInput" accept="image/*" class="hidden" />
+          </div>
+          
+          <!-- Upload prompt -->
+          <div id="uploadPrompt" class="text-center p-4">
+            <svg class="w-8 h-8 text-gold/50 mx-auto mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+            </svg>
+            <p class="text-mocha/70 text-sm">Select an image to preview</p>
+          </div>
+          
+          <!-- Instructions (shown after image upload) -->
+          <div id="editInstructions" class="text-center hidden">
+            <p class="text-sm text-mocha/80">Drag to position • Use slider to zoom</p>
+          </div>
+        </div>
+      </div>
+      
+      <div class="flex justify-end space-x-4">
+        <button type="button" id="cancelBtn" class="px-4 py-2 border border-sand hover:border-mocha/50 rounded-sm transition-colors">
+          Cancel
+        </button>
+        <button type="button" id="saveBtn" class="px-4 py-2 bg-gold text-white hover:bg-gold/90 rounded-sm transition-colors" disabled>
+          Save
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Load user profile data
+    document.addEventListener('DOMContentLoaded', function() {
+      loadUserProfile();
+      initAvatarUpload();
+    });
+
+    function loadUserProfile() {
+      const user = JSON.parse(localStorage.getItem('user') || '{}');
+      
+      if (user.name) {
+        const nameParts = user.name.split(' ');
+        document.getElementById('firstName').value = nameParts[0] || '';
+        document.getElementById('lastName').value = nameParts.slice(1).join(' ') || '';
+      }
+      
+      if (user.email) {
+        document.getElementById('email').value = user.email;
+      }
+      
+      if (user.membership) {
+        const membershipText = user.membership.charAt(0).toUpperCase() + user.membership.slice(1) + ' Tier';
+        document.getElementById('currentMembership').textContent = 'Current Plan: ' + membershipText;
+      }
+      
+      if (user.membershipStartDate) {
+        const joinDate = new Date(user.membershipStartDate).toLocaleDateString('en-US', {
+          year: 'numeric',
+          month: 'long'
+        });
+        document.getElementById('joinDate').textContent = joinDate;
+      }
+      
+      // Load avatar if available
+      if (user.avatar) {
+        const profileAvatar = document.getElementById('profileAvatar');
+        const defaultAvatar = document.getElementById('defaultAvatar');
+        profileAvatar.src = user.avatar;
+        profileAvatar.classList.remove('hidden');
+        defaultAvatar.classList.add('hidden');
+      }
+    }
+
+    // Handle form submission
+    document.getElementById('profileForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      
+      const formData = new FormData(e.target);
+      const profileData = {
+        firstName: formData.get('firstName'),
+        lastName: formData.get('lastName'),
+        bio: formData.get('bio'),
+        website: formData.get('website'),
+        twitter: formData.get('twitter'),
+        linkedin: formData.get('linkedin')
+      };
+      
+      try {
+        // Here you would typically send the data to your API
+        console.log('Profile data to save:', profileData);
+        alert('Profile updated successfully!');
+        
+        // Update localStorage with new name
+        const user = JSON.parse(localStorage.getItem('user') || '{}');
+        user.name = `${profileData.firstName} ${profileData.lastName}`.trim();
+        localStorage.setItem('user', JSON.stringify(user));
+        
+      } catch (error) {
+        console.error('Error updating profile:', error);
+        alert('Error updating profile. Please try again.');
+      }
+    });
+
+    // Reset form to original values
+    document.getElementById('resetBtn').addEventListener('click', function() {
+      loadUserProfile();
+    });
+    
+    // Advanced avatar upload functionality with zoom and drag
+    function initAvatarUpload() {
+      const changeAvatarBtn = document.getElementById('changeAvatarBtn');
+      const avatarModal = document.getElementById('avatarModal');
+      const closeModal = document.getElementById('closeModal');
+      const cancelBtn = document.getElementById('cancelBtn');
+      const saveBtn = document.getElementById('saveBtn');
+      const fileInput = document.getElementById('fileInput');
+      const previewImage = document.getElementById('previewImage');
+      const uploadPrompt = document.getElementById('uploadPrompt');
+      const editInstructions = document.getElementById('editInstructions');
+      const zoomSlider = document.getElementById('zoomSlider');
+      const imageContainer = document.getElementById('imageContainer');
+      
+      // Variables for image positioning
+      let isDragging = false;
+      let startX, startY, startLeft, startTop;
+      let currentZoom = 1;
+      
+      // Load existing avatar if available
+      const user = JSON.parse(localStorage.getItem('user') || '{}');
+      if (user.avatar) {
+        const profileAvatar = document.getElementById('profileAvatar');
+        const defaultAvatar = document.getElementById('defaultAvatar');
+        profileAvatar.src = user.avatar;
+        profileAvatar.classList.remove('hidden');
+        defaultAvatar.classList.add('hidden');
+      }
+      
+      // Open modal when "Edit" is clicked
+      changeAvatarBtn.addEventListener('click', () => {
+        avatarModal.classList.remove('hidden');
+        resetEditor();
+      });
+      
+      // Reset editor state
+      function resetEditor() {
+        // Reset file input
+        fileInput.value = '';
+        
+        // Reset preview
+        previewImage.style.display = 'none';
+        previewImage.style.transform = 'scale(1)';
+        
+        // Reset position
+        imageContainer.style.transform = 'translate(0px, 0px)';
+        
+        // Reset UI elements
+        uploadPrompt.style.display = 'block';
+        editInstructions.classList.add('hidden');
+        zoomSlider.value = 100;
+        zoomSlider.disabled = true;
+        saveBtn.disabled = true;
+        
+        // Reset variables
+        currentZoom = 1;
+      }
+      
+      // Close modal
+      function closeModalHandler() {
+        avatarModal.classList.add('hidden');
+      }
+      
+      closeModal.addEventListener('click', closeModalHandler);
+      cancelBtn.addEventListener('click', closeModalHandler);
+      
+      // Handle file selection
+      fileInput.addEventListener('change', (e) => {
+        if (e.target.files && e.target.files[0]) {
+          const file = e.target.files[0];
+          
+          // Check file type and size
+          if (!file.type.match('image.*')) {
+            alert('Please select an image file');
+            return;
+          }
+          
+          if (file.size > 5 * 1024 * 1024) { // 5MB limit
+            alert('Image size should be less than 5MB');
+            return;
+          }
+          
+          const reader = new FileReader();
+          
+          reader.onload = (e) => {
+            // Load image to get dimensions
+            const img = new Image();
+            img.onload = () => {
+              // Show preview
+              previewImage.style.display = 'block';
+              
+              // Hide upload prompt, show instructions
+              uploadPrompt.style.display = 'none';
+              editInstructions.classList.remove('hidden');
+              
+              // Enable zoom slider and save button
+              zoomSlider.disabled = false;
+              saveBtn.disabled = false;
+              
+              // Calculate initial scale to fit the image in the crop area
+              const cropArea = previewImage.closest('.rounded-full');
+              const cropSize = cropArea.offsetWidth;
+              
+              const scaleX = cropSize / img.width;
+              const scaleY = cropSize / img.height;
+              const scale = Math.max(scaleX, scaleY);
+              
+              // Set initial zoom
+              currentZoom = scale;
+              zoomSlider.value = scale * 100;
+              previewImage.style.transform = `scale(${scale})`;
+              
+              // Center the image
+              centerImage(img, scale);
+            };
+            
+            img.src = e.target.result;
+            previewImage.src = e.target.result;
+          };
+          
+          reader.readAsDataURL(file);
+        }
+      });
+      
+      // Center image in crop area
+      function centerImage(img, scale) {
+        const cropArea = previewImage.closest('.rounded-full');
+        const cropWidth = cropArea.offsetWidth;
+        const cropHeight = cropArea.offsetHeight;
+        
+        const scaledWidth = img.width * scale;
+        const scaledHeight = img.height * scale;
+        
+        const leftPos = (cropWidth - scaledWidth) / 2;
+        const topPos = (cropHeight - scaledHeight) / 2;
+        
+        imageContainer.style.transform = `translate(${leftPos}px, ${topPos}px)`;
+      }
+      
+      // Make image draggable
+      previewImage.addEventListener('mousedown', startDrag);
+      previewImage.addEventListener('touchstart', startDrag, { passive: false });
+      
+      function startDrag(e) {
+        e.preventDefault();
+        isDragging = true;
+        
+        // Get starting positions
+        if (e.type === 'touchstart') {
+          startX = e.touches[0].clientX;
+          startY = e.touches[0].clientY;
+        } else {
+          startX = e.clientX;
+          startY = e.clientY;
+        }
+        
+        // Get current transform
+        const transform = window.getComputedStyle(imageContainer).transform;
+        const matrix = new DOMMatrix(transform);
+        startLeft = matrix.m41;
+        startTop = matrix.m42;
+        
+        document.addEventListener('mousemove', drag);
+        document.addEventListener('touchmove', drag, { passive: false });
+        document.addEventListener('mouseup', endDrag);
+        document.addEventListener('touchend', endDrag);
+      }
+      
+      function drag(e) {
+        if (!isDragging) return;
+        e.preventDefault();
+        
+        let currentX, currentY;
+        if (e.type === 'touchmove') {
+          currentX = e.touches[0].clientX;
+          currentY = e.touches[0].clientY;
+        } else {
+          currentX = e.clientX;
+          currentY = e.clientY;
+        }
+        
+        const deltaX = currentX - startX;
+        const deltaY = currentY - startY;
+        
+        const newLeft = startLeft + deltaX;
+        const newTop = startTop + deltaY;
+        
+        imageContainer.style.transform = `translate(${newLeft}px, ${newTop}px)`;
+      }
+      
+      function endDrag() {
+        isDragging = false;
+        document.removeEventListener('mousemove', drag);
+        document.removeEventListener('touchmove', drag);
+        document.removeEventListener('mouseup', endDrag);
+        document.removeEventListener('touchend', endDrag);
+      }
+      
+      // Zoom functionality
+      zoomSlider.addEventListener('input', () => {
+        currentZoom = zoomSlider.value / 100;
+        previewImage.style.transform = `scale(${currentZoom})`;
+      });
+      
+      // Save avatar
+      saveBtn.addEventListener('click', () => {
+        // Create a canvas to capture the cropped image
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+        
+        // Set canvas size to the desired output size (circle dimensions)
+        const size = 240; // 240px for high quality
+        canvas.width = size;
+        canvas.height = size;
+        
+        // Draw a circular clipping path
+        ctx.beginPath();
+        ctx.arc(size/2, size/2, size/2, 0, Math.PI * 2);
+        ctx.closePath();
+        ctx.clip();
+        
+        // Get current transform values
+        const cropArea = previewImage.closest('.rounded-full');
+        const cropSize = cropArea.offsetWidth;
+        
+        // Scale ratio between canvas and crop area
+        const scaleRatio = size / cropSize;
+        
+        // Get image position
+        const transform = window.getComputedStyle(imageContainer).transform;
+        const matrix = new DOMMatrix(transform);
+        const translateX = matrix.m41;
+        const translateY = matrix.m42;
+        
+        // Get image dimensions
+        const img = new Image();
+        img.src = previewImage.src;
+        
+        // Draw the image with transformations
+        ctx.drawImage(
+          img,
+          -translateX * scaleRatio,
+          -translateY * scaleRatio,
+          img.width * currentZoom * scaleRatio,
+          img.height * currentZoom * scaleRatio
+        );
+        
+        // Convert canvas to data URL
+        const croppedImageDataUrl = canvas.toDataURL('image/jpeg', 0.9);
+        
+        // Update profile avatar
+        const profileAvatar = document.getElementById('profileAvatar');
+        const defaultAvatar = document.getElementById('defaultAvatar');
+        profileAvatar.src = croppedImageDataUrl;
+        profileAvatar.classList.remove('hidden');
+        defaultAvatar.classList.add('hidden');
+        
+        // Save to localStorage
+        const user = JSON.parse(localStorage.getItem('user') || '{}');
+        user.avatar = croppedImageDataUrl;
+        localStorage.setItem('user', JSON.stringify(user));
+        
+        // Close modal
+        closeModalHandler();
+      });
+    }
+  </script>
+</MainLayout>

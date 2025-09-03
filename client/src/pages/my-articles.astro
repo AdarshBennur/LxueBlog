@@ -1,0 +1,701 @@
+---
+import MainLayout from '../layouts/MainLayout.astro';
+---
+
+<MainLayout title="My Articles" description="Manage and view your published articles" currentPage="my-articles">
+  <section class="py-16 bg-gradient-to-br from-sand/30 to-white min-h-screen">
+    <div class="container-custom max-w-6xl">
+      <!-- Page Header -->
+      <div class="text-center mb-12">
+        <h1 class="text-4xl font-serif mb-4 text-charcoal">My Articles</h1>
+        <div class="w-16 h-px bg-gold mx-auto mb-4"></div>
+        <p class="text-mocha/95 font-light">Manage your published content and drafts</p>
+      </div>
+
+      <!-- Action Bar -->
+      <div class="flex flex-col sm:flex-row justify-between items-center mb-8 space-y-4 sm:space-y-0">
+        <div class="flex items-center space-x-4">
+          <button 
+            class="bg-gold hover:bg-gold/90 text-white px-6 py-3 rounded-sm font-medium transition-colors flex items-center space-x-2"
+            onclick="createNewArticle()"
+          >
+            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+            </svg>
+            <span>New Article</span>
+          </button>
+          
+          <div class="relative">
+            <select 
+              id="statusFilter" 
+              class="appearance-none bg-white/80 border border-sand/50 rounded-sm px-4 py-3 pr-8 focus:border-gold focus:ring-1 focus:ring-gold/20 transition-all"
+              onchange="filterArticles()"
+            >
+              <option value="all">All Articles</option>
+              <option value="published">Published</option>
+              <option value="draft">Drafts</option>
+              <option value="pending">Pending Review</option>
+            </select>
+            <svg class="w-4 h-4 absolute right-3 top-1/2 transform -translate-y-1/2 text-mocha/60 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+            </svg>
+          </div>
+        </div>
+        
+        <div class="flex items-center space-x-4">
+          <div class="relative w-80">
+            <input 
+              type="text" 
+              id="searchInput"
+              placeholder="🔍 Search your articles..."
+              class="w-full px-4 py-3 border border-sand/50 rounded-sm focus:border-gold focus:ring-1 focus:ring-gold/20 bg-white transition-all text-charcoal placeholder:text-mocha/50 text-sm"
+              oninput="debouncedSearch()"
+              onkeydown="handleSearchKeydown(event)"
+            />
+            <button 
+              type="button"
+              id="clearSearchBtn"
+              onclick="clearSearch()"
+              class="absolute right-3 top-1/2 transform -translate-y-1/2 text-mocha/40 hover:text-mocha/60 transition-colors hidden"
+              title="Clear search"
+            >
+              <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
+          
+          <div class="flex items-center space-x-2">
+            <button onclick="toggleView('grid')" id="gridView" class="p-2 rounded border border-sand/50 bg-gold text-white">
+              <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+              </svg>
+            </button>
+            <button onclick="toggleView('list')" id="listView" class="p-2 rounded border border-sand/50 hover:bg-sand/10">
+              <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16" />
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Articles Stats -->
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+        <div class="bg-white/80 backdrop-blur-sm border border-sand/30 rounded-lg p-6 text-center">
+          <div class="text-2xl font-serif text-gold mb-2" id="totalArticles">0</div>
+          <div class="text-sm text-mocha/70">Total Articles</div>
+        </div>
+        
+        <div class="bg-white/80 backdrop-blur-sm border border-sand/30 rounded-lg p-6 text-center">
+          <div class="text-2xl font-serif text-green-600 mb-2" id="publishedArticles">0</div>
+          <div class="text-sm text-mocha/70">Published</div>
+        </div>
+        
+        <div class="bg-white/80 backdrop-blur-sm border border-sand/30 rounded-lg p-6 text-center">
+          <div class="text-2xl font-serif text-blue-600 mb-2" id="draftArticles">0</div>
+          <div class="text-sm text-mocha/70">Drafts</div>
+        </div>
+        
+        <div class="bg-white/80 backdrop-blur-sm border border-sand/30 rounded-lg p-6 text-center">
+          <div class="text-2xl font-serif text-purple-600 mb-2" id="totalViews">0</div>
+          <div class="text-sm text-mocha/70">Total Views</div>
+        </div>
+      </div>
+
+      <!-- Articles Container -->
+      <div id="articlesContainer">
+        <!-- Empty State -->
+        <div id="emptyState" class="text-center py-16">
+          <div class="w-24 h-24 rounded-full bg-sand/10 flex items-center justify-center mx-auto mb-6">
+            <svg class="w-12 h-12 text-mocha/40" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" />
+            </svg>
+          </div>
+          <h3 class="text-xl font-serif text-charcoal mb-2" id="emptyStateTitle">No Articles Yet</h3>
+          <p class="text-mocha/70 mb-6" id="emptyStateMessage">Start writing your first article to share your thoughts with the world</p>
+          <button 
+            onclick="createNewArticle()"
+            class="bg-gold hover:bg-gold/90 text-white px-6 py-3 rounded-sm font-medium transition-colors inline-flex items-center space-x-2"
+          >
+            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+            </svg>
+            <span>Create Your First Article</span>
+          </button>
+        </div>
+
+        <!-- Articles Grid View -->
+        <div id="articlesGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 hidden">
+          <!-- Article cards will be inserted here -->
+        </div>
+
+        <!-- Articles List View -->
+        <div id="articlesList" class="space-y-4 hidden">
+          <!-- Article list items will be inserted here -->
+        </div>
+      </div>
+
+      <!-- Pagination -->
+      <div id="pagination" class="flex justify-center mt-12 hidden">
+        <div class="flex items-center space-x-2" id="paginationContainer">
+          <!-- Pagination buttons will be dynamically generated based on actual data -->
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    let articles = [];
+    let currentView = 'grid';
+    let currentFilter = 'all';
+
+    // Initialize page
+    document.addEventListener('DOMContentLoaded', function() {
+      loadArticles();
+      updateStats();
+      renderArticles();
+      initializeSearchInput();
+    });
+
+    function initializeSearchInput() {
+      const searchInput = document.getElementById('searchInput');
+      const clearBtn = document.getElementById('clearSearchBtn');
+      
+      // Ensure search input is clean on page load
+      searchInput.value = '';
+      clearBtn.classList.add('hidden');
+      
+      console.log('Search functionality initialized');
+    }
+
+    async function loadArticles() {
+      console.log('🔄 Loading user articles...');
+      
+      try {
+        // Check if user is authenticated
+        const token = localStorage.getItem('token');
+        if (!token) {
+          console.log('❌ User not authenticated, showing empty state');
+          articles = [];
+          return;
+        }
+        
+        console.log('🔐 User token found, fetching user info...');
+        
+        // Get current user info to fetch their articles
+        const userApiUrl = `${import.meta.env.PUBLIC_API_URL || 'http://localhost:3001/api'}/auth/me`;
+        console.log(`📡 Fetching user info from: ${userApiUrl}`);
+        
+        const userResponse = await fetch(userApiUrl, {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
+        
+        console.log(`📊 User response status: ${userResponse.status} ${userResponse.statusText}`);
+        
+        if (!userResponse.ok) {
+          throw new Error('Failed to get user information');
+        }
+        
+        const userResult = await userResponse.json();
+        console.log('👤 User info:', userResult);
+        const userId = userResult.data._id;
+        console.log(`🆔 User ID: ${userId}`);
+        
+        // Fetch user's articles from API
+        const articlesApiUrl = `${import.meta.env.PUBLIC_API_URL || 'http://localhost:3001/api'}/posts/user/${userId}`;
+        console.log(`📡 Fetching user articles from: ${articlesApiUrl}`);
+        
+        const response = await fetch(articlesApiUrl, {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
+        
+        console.log(`📊 Articles response status: ${response.status} ${response.statusText}`);
+        
+        if (!response.ok) {
+          throw new Error('Failed to fetch user articles');
+        }
+        
+        const result = await response.json();
+        console.log('📦 User articles API response:', result);
+        
+        const apiArticles = result.data || [];
+        console.log(`📄 Raw user articles from API: ${apiArticles.length}`);
+        
+        // Transform API articles to match frontend format
+        articles = apiArticles.map(article => {
+          console.log(`🔄 Processing user article: ${article.title}`);
+          return {
+            id: article._id,
+            title: article.title,
+            excerpt: article.excerpt,
+            content: article.content,
+            image: article.featuredImage?.startsWith('/uploads/') 
+              ? `${import.meta.env.PUBLIC_API_URL || 'http://localhost:3001'}${article.featuredImage}`
+              : article.featuredImage,
+            category: article.category?.name || article.category,
+            date: new Date(article.createdAt).toLocaleDateString('en-US', { 
+              year: 'numeric', 
+              month: 'long', 
+              day: 'numeric' 
+            }),
+            author: article.author?.name || 'Current User',
+            status: article.status,
+            publishedDate: article.status === 'published' ? article.createdAt : null,
+            views: article.views || 0,
+            comments: 0, // Comments would need separate API call
+            readTime: `${article.readTime || 3} min read`,
+            slug: `/article?id=${article._id}`
+          };
+        });
+        
+        console.log(`✅ Transformed ${articles.length} user articles`);
+        
+        if (articles.length === 0) {
+          console.warn('⚠️ No articles found for this user');
+        } else {
+          console.log('🎯 Sample user article:', {
+            title: articles[0].title,
+            status: articles[0].status,
+            category: articles[0].category
+          });
+        }
+        
+      } catch (error) {
+        console.error('❌ Error loading articles from API:', error);
+        
+        // Fallback to empty array if API fails
+        articles = [];
+        console.log('🔄 Using empty array as fallback');
+      }
+    }
+
+    function updateStats() {
+      const published = articles.filter(a => a.status === 'published').length;
+      const drafts = articles.filter(a => a.status === 'draft').length;
+      const totalViews = articles.reduce((sum, a) => sum + a.views, 0);
+
+      document.getElementById('totalArticles').textContent = articles.length;
+      document.getElementById('publishedArticles').textContent = published;
+      document.getElementById('draftArticles').textContent = drafts;
+      document.getElementById('totalViews').textContent = totalViews.toLocaleString();
+    }
+
+    function renderArticles() {
+      const filteredArticles = filterArticlesByStatus(articles, currentFilter);
+      const searchTerm = document.getElementById('searchInput').value.toLowerCase().trim();
+      
+      let searchedArticles = filteredArticles;
+      
+      // Only filter if there's actually a search term
+      if (searchTerm.length > 0) {
+        searchedArticles = filteredArticles.filter(article => 
+          (article.title && article.title.toLowerCase().includes(searchTerm)) ||
+          (article.excerpt && article.excerpt.toLowerCase().includes(searchTerm)) ||
+          (article.content && article.content.toLowerCase().includes(searchTerm)) ||
+          (article.tags && article.tags.some(tag => tag.toLowerCase().includes(searchTerm)))
+        );
+      }
+
+      if (searchedArticles.length === 0) {
+        showEmptyState();
+      } else {
+        hideEmptyState();
+        if (currentView === 'grid') {
+          renderGridView(searchedArticles);
+        } else {
+          renderListView(searchedArticles);
+        }
+      }
+      
+      // Update search feedback
+      updateSearchFeedback(searchTerm, searchedArticles.length, filteredArticles.length);
+    }
+
+    function filterArticlesByStatus(articles, status) {
+      if (status === 'all') return articles;
+      return articles.filter(article => article.status === status);
+    }
+
+    function updateSearchFeedback(searchTerm, resultCount, totalCount) {
+      // You can add search feedback here if needed
+      console.log(`Search: "${searchTerm}" - Found ${resultCount} of ${totalCount} articles`);
+    }
+
+    function showEmptyState() {
+      const searchTerm = document.getElementById('searchInput').value.toLowerCase().trim();
+      const emptyTitle = document.getElementById('emptyStateTitle');
+      const emptyMessage = document.getElementById('emptyStateMessage');
+      
+      if (searchTerm.length > 0) {
+        emptyTitle.textContent = 'No Articles Found';
+        emptyMessage.textContent = `No articles match your search for "${searchTerm}". Try different keywords or clear your search.`;
+      } else if (articles.length === 0) {
+        emptyTitle.textContent = 'No Articles Yet';
+        emptyMessage.textContent = 'Start writing your first article to share your thoughts with the world';
+      } else {
+        emptyTitle.textContent = 'No Articles Found';
+        emptyMessage.textContent = 'No articles match the current filter. Try selecting a different status filter.';
+      }
+      
+      document.getElementById('emptyState').classList.remove('hidden');
+      document.getElementById('articlesGrid').classList.add('hidden');
+      document.getElementById('articlesList').classList.add('hidden');
+      document.getElementById('pagination').classList.add('hidden');
+    }
+
+    function hideEmptyState() {
+      document.getElementById('emptyState').classList.add('hidden');
+      // Only show pagination if there are enough articles to paginate
+      updatePagination();
+    }
+
+    function updatePagination() {
+      const paginationContainer = document.getElementById('paginationContainer');
+      const pagination = document.getElementById('pagination');
+      
+      // For now, hide pagination since we don't have real pagination implemented
+      // In a real app, you would calculate total pages and show pagination accordingly
+      pagination.classList.add('hidden');
+      paginationContainer.innerHTML = '';
+    }
+
+    function renderGridView(articles) {
+      document.getElementById('articlesGrid').classList.remove('hidden');
+      document.getElementById('articlesList').classList.add('hidden');
+      
+      const grid = document.getElementById('articlesGrid');
+      grid.innerHTML = articles.map(article => `
+        <div class="bg-white/80 backdrop-blur-sm border border-sand/30 rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow">
+          <div class="h-48 bg-gradient-to-br from-sand/20 to-gold/10 overflow-hidden">
+            ${article.image ? 
+              `<img src="${article.image}" alt="${article.title}" class="w-full h-full object-cover" 
+                onerror="this.onerror=null; this.src='https://placehold.co/600x400/F9F5EB/gold?text=Luxe+Blog'; this.classList.add('object-contain');" />` :
+              `<div class="w-full h-full flex items-center justify-center">
+                <svg class="w-16 h-16 text-sand/40" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                </svg>
+              </div>`
+            }
+          </div>
+          <div class="p-6">
+            <div class="flex items-center justify-between mb-3">
+              <span class="px-2 py-1 text-xs font-medium rounded-full ${getStatusBadgeClass(article.status)}">
+                ${article.status.charAt(0).toUpperCase() + article.status.slice(1)}
+              </span>
+              <span class="text-xs text-mocha/60">${article.readTime}</span>
+            </div>
+            <h3 class="text-lg font-serif text-charcoal mb-2 line-clamp-2">${article.title}</h3>
+            <p class="text-sm text-mocha/80 mb-4 line-clamp-3">${article.excerpt}</p>
+            
+            <div class="flex items-center justify-between text-xs text-mocha/60 mb-4">
+              ${article.publishedDate ? `<span>Published ${new Date(article.publishedDate).toLocaleDateString()}</span>` : '<span>Not published</span>'}
+              <div class="flex items-center space-x-4">
+                <span>${article.views} views</span>
+                <span>${article.comments} comments</span>
+              </div>
+            </div>
+            
+            <div class="flex items-center justify-between">
+              <div class="flex items-center space-x-2">
+                <button onclick="editArticle(${article.id})" class="text-gold hover:text-gold/80 transition-colors">
+                  <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                  </svg>
+                </button>
+                <button onclick="deleteArticle(${article.id})" class="text-red-500 hover:text-red-600 transition-colors">
+                  <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                  </svg>
+                </button>
+              </div>
+              
+              ${article.status === 'published' 
+                ? `<button onclick="viewArticle(${article.id})" class="text-sm text-gold hover:text-gold/80 transition-colors">View</button>`
+                : `<button onclick="editArticle(${article.id})" class="text-sm text-gold hover:text-gold/80 transition-colors">Continue Writing</button>`
+              }
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function renderListView(articles) {
+      document.getElementById('articlesGrid').classList.add('hidden');
+      document.getElementById('articlesList').classList.remove('hidden');
+      
+      const list = document.getElementById('articlesList');
+      list.innerHTML = articles.map(article => `
+        <div class="bg-white/80 backdrop-blur-sm border border-sand/30 rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow">
+          <div class="flex items-center justify-between">
+            ${article.image ? 
+              `<div class="w-20 h-20 mr-4 rounded overflow-hidden flex-shrink-0">
+                <img src="${article.image}" alt="${article.title}" class="w-full h-full object-cover" 
+                  onerror="this.onerror=null; this.src='https://placehold.co/600x400/F9F5EB/gold?text=Luxe+Blog'; this.classList.add('object-contain');" />
+              </div>` : ''
+            }
+            <div class="flex-1">
+              <div class="flex items-center space-x-4 mb-2">
+                <h3 class="text-lg font-serif text-charcoal">${article.title}</h3>
+                <span class="px-2 py-1 text-xs font-medium rounded-full ${getStatusBadgeClass(article.status)}">
+                  ${article.status.charAt(0).toUpperCase() + article.status.slice(1)}
+                </span>
+              </div>
+              <p class="text-sm text-mocha/80 mb-3">${article.excerpt}</p>
+              <div class="flex items-center space-x-6 text-xs text-mocha/60">
+                ${article.publishedDate ? `<span>Published ${new Date(article.publishedDate).toLocaleDateString()}</span>` : '<span>Not published</span>'}
+                <span>${article.views} views</span>
+                <span>${article.comments} comments</span>
+                <span>${article.readTime}</span>
+              </div>
+            </div>
+            
+            <div class="flex items-center space-x-3 ml-6">
+              <button onclick="editArticle(${article.id})" class="p-2 text-gold hover:text-gold/80 transition-colors" title="Edit">
+                <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                </svg>
+              </button>
+              
+              ${article.status === 'published' 
+                ? `<button onclick="viewArticle(${article.id})" class="p-2 text-charcoal hover:text-gold transition-colors" title="View">
+                     <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                     </svg>
+                   </button>`
+                : ''
+              }
+              
+              <button onclick="deleteArticle(${article.id})" class="p-2 text-red-500 hover:text-red-600 transition-colors" title="Delete">
+                <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function getStatusBadgeClass(status) {
+      switch(status) {
+        case 'published': return 'bg-green-100 text-green-800';
+        case 'draft': return 'bg-blue-100 text-blue-800';
+        case 'pending': return 'bg-yellow-100 text-yellow-800';
+        default: return 'bg-gray-100 text-gray-800';
+      }
+    }
+
+    // Event handlers
+    function toggleView(view) {
+      currentView = view;
+      
+      // Update button states
+      document.getElementById('gridView').className = view === 'grid' 
+        ? 'p-2 rounded border border-sand/50 bg-gold text-white'
+        : 'p-2 rounded border border-sand/50 hover:bg-sand/10';
+      
+      document.getElementById('listView').className = view === 'list' 
+        ? 'p-2 rounded border border-sand/50 bg-gold text-white'
+        : 'p-2 rounded border border-sand/50 hover:bg-sand/10';
+      
+      renderArticles();
+    }
+
+    function filterArticles() {
+      currentFilter = document.getElementById('statusFilter').value;
+      renderArticles();
+    }
+
+    function searchArticles() {
+      console.log('Search function called');
+      renderArticles();
+    }
+
+    // Enhanced search with debouncing
+    let searchTimeout;
+    function debouncedSearch() {
+      toggleClearButton(); // Show/hide clear button immediately
+      clearTimeout(searchTimeout);
+      searchTimeout = setTimeout(() => {
+        searchArticles();
+      }, 300); // 300ms delay
+    }
+
+    // Clear search function
+    function clearSearch() {
+      document.getElementById('searchInput').value = '';
+      document.getElementById('clearSearchBtn').classList.add('hidden');
+      searchArticles();
+    }
+
+    // Handle search keydown events
+    function handleSearchKeydown(event) {
+      if (event.key === 'Enter') {
+        event.preventDefault();
+        searchArticles();
+      } else if (event.key === 'Escape') {
+        clearSearch();
+      }
+    }
+
+    // Show/hide clear button based on input
+    function toggleClearButton() {
+      const searchInput = document.getElementById('searchInput');
+      const clearBtn = document.getElementById('clearSearchBtn');
+      
+      if (searchInput.value.trim().length > 0) {
+        clearBtn.classList.remove('hidden');
+      } else {
+        clearBtn.classList.add('hidden');
+      }
+    }
+
+    function createNewArticle() {
+      // Redirect to blog page with modal open flag
+      window.location.href = '/blog?action=post';
+    }
+
+    function editArticle(id) {
+      // Find the article in our array
+      const article = articles.find(a => a.id === id);
+      if (!article) {
+        showToast('Article not found', 'error');
+        return;
+      }
+      
+      // In a real app, you would redirect to an editor page
+      // For this demo, we'll open a modal with the article data pre-filled
+      // Redirect to blog page with edit action and article ID
+      window.location.href = `/blog?action=edit&id=${id}`;
+    }
+
+    function viewArticle(id) {
+      // Find the article in our array
+      const article = articles.find(a => a.id === id);
+      if (!article) {
+        showToast('Article not found', 'error');
+        return;
+      }
+      
+      // In a real app, you would redirect to the article page
+      // For this demo, we'll just redirect to the slug if it exists
+      if (article.slug) {
+        window.location.href = article.slug;
+      } else {
+        showToast('Article URL not available', 'error');
+      }
+    }
+    
+    // Toast notification function
+    function showToast(message, type = 'success') {
+      // Create toast element if it doesn't exist
+      let toast = document.getElementById('toastNotification');
+      if (!toast) {
+        toast = document.createElement('div');
+        toast.id = 'toastNotification';
+        toast.className = 'fixed bottom-4 left-1/2 transform -translate-x-1/2 bg-charcoal text-white py-3 px-6 rounded-lg shadow-lg z-50 opacity-0 pointer-events-none transition-opacity duration-300 flex items-center';
+        
+        const successIcon = document.createElement('svg');
+        successIcon.id = 'toastSuccessIcon';
+        successIcon.className = 'w-5 h-5 mr-2 text-green-400';
+        successIcon.setAttribute('fill', 'none');
+        successIcon.setAttribute('viewBox', '0 0 24 24');
+        successIcon.setAttribute('stroke', 'currentColor');
+        successIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />';
+        
+        const errorIcon = document.createElement('svg');
+        errorIcon.id = 'toastErrorIcon';
+        errorIcon.className = 'w-5 h-5 mr-2 text-red-400 hidden';
+        errorIcon.setAttribute('fill', 'none');
+        errorIcon.setAttribute('viewBox', '0 0 24 24');
+        errorIcon.setAttribute('stroke', 'currentColor');
+        errorIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />';
+        
+        const messageSpan = document.createElement('span');
+        messageSpan.id = 'toastMessage';
+        
+        toast.appendChild(successIcon);
+        toast.appendChild(errorIcon);
+        toast.appendChild(messageSpan);
+        
+        document.body.appendChild(toast);
+      }
+      
+      const toastMessage = document.getElementById('toastMessage');
+      const toastSuccessIcon = document.getElementById('toastSuccessIcon');
+      const toastErrorIcon = document.getElementById('toastErrorIcon');
+      
+      toastMessage.textContent = message;
+      
+      if (type === 'success') {
+        toastSuccessIcon.classList.remove('hidden');
+        toastErrorIcon.classList.add('hidden');
+      } else {
+        toastSuccessIcon.classList.add('hidden');
+        toastErrorIcon.classList.remove('hidden');
+      }
+      
+      toast.classList.remove('opacity-0', 'pointer-events-none');
+      
+      setTimeout(() => {
+        toast.classList.add('opacity-0', 'pointer-events-none');
+      }, 3000);
+    }
+
+    async function deleteArticle(id) {
+      if (confirm('Are you sure you want to delete this article?')) {
+        try {
+          // Check if user is authenticated
+          const token = localStorage.getItem('token');
+          if (!token) {
+            showToast('Please log in to delete articles', 'error');
+            return;
+          }
+          
+          // Delete article via API
+          const response = await fetch(`${import.meta.env.PUBLIC_API_URL || 'http://localhost:3001/api'}/posts/${id}`, {
+            method: 'DELETE',
+            headers: {
+              'Authorization': `Bearer ${token}`
+            }
+          });
+          
+          if (!response.ok) {
+            const errorResult = await response.json();
+            
+            // Handle specific error types
+            if (response.status === 401) {
+              throw new Error('Please log in to delete articles');
+            } else if (response.status === 403) {
+              throw new Error('You can only delete your own articles');
+            } else if (response.status === 404) {
+              throw new Error('Article not found');
+            } else {
+              throw new Error(errorResult.message || 'Failed to delete article');
+            }
+          }
+          
+          // Reload articles after successful deletion
+          await loadArticles();
+          
+          // Update UI
+          updateStats();
+          renderArticles();
+          
+          // Show success message
+          showToast('Article deleted successfully', 'success');
+          
+        } catch (error) {
+          console.error('Error deleting article:', error);
+          showToast(error.message || 'Failed to delete article', 'error');
+        }
+      }
+    }
+  </script>
+</MainLayout>
