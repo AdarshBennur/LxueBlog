@@ -7,7 +7,9 @@
     "build": "echo 'No build step required for this Node.js application'",
     "start": "node index.js",
     "dev": "nodemon index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "health": "curl -f http://localhost:${PORT:-10000}/api/health || exit 1",
+    "logs": "node -e \"console.log('Server logs would appear here in production')\""
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",

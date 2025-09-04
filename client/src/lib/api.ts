@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = import.meta.env.PUBLIC_API_URL || 'http://localhost:3001/api';
+const API_URL = import.meta.env.PUBLIC_API_URL || 'http://localhost:10000/api';
 
 // Create axios instance with base URL
 const api = axios.create({

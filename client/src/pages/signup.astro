@@ -269,7 +269,11 @@ import MainLayout from '../layouts/MainLayout.astro';
       }
       
       try {
-        const response = await fetch('http://localhost:3001/api/auth/register', {
+        // Use the proper API base URL from environment
+        const API_URL = import.meta.env.PUBLIC_API_URL || 'http://localhost:10000/api';
+        console.log('Making registration request to:', `${API_URL}/auth/register`);
+        
+        const response = await fetch(`${API_URL}/auth/register`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
@@ -278,6 +282,7 @@ import MainLayout from '../layouts/MainLayout.astro';
         });
         
         const result = await response.json();
+        console.log('Registration response:', { status: response.status, success: result.success, message: result.message });
         
         if (result.success) {
           // Store token
@@ -293,11 +298,16 @@ import MainLayout from '../layouts/MainLayout.astro';
           // Redirect to home page
           window.location.href = '/home';
         } else {
-          alert('Error: ' + result.message);
+          console.error('Registration failed:', result);
+          alert('Error: ' + (result.message || 'Registration failed'));
         }
       } catch (error) {
         console.error('Signup error:', error);
-        alert('An error occurred. Please try again.');
+        // Show more detailed error information
+        const errorMsg = error.message.includes('fetch') 
+          ? 'Unable to connect to server. Please check your internet connection.' 
+          : 'An error occurred. Please try again.';
+        alert(errorMsg);
       }
     });
   </script>
