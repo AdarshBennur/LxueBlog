@@ -23,6 +23,41 @@ api.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
+// Improve error handling for better debugging
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    // Log detailed error information to console
+    if (error.response) {
+      // Server responded with non-2xx status
+      console.error('API Error Response:', {
+        status: error.response.status,
+        statusText: error.response.statusText,
+        data: error.response.data,
+        endpoint: error.config.url,
+        method: error.config.method
+      });
+    } else if (error.request) {
+      // Request made but no response received
+      console.error('API No Response:', {
+        request: error.request,
+        endpoint: error.config.url,
+        method: error.config.method
+      });
+    } else {
+      // Error in setting up request
+      console.error('API Request Error:', error.message);
+    }
+    
+    // Enhance error object with more context
+    error.friendlyMessage = 
+      error.response?.data?.message || 
+      'Unable to connect to the server. Please try again later.';
+      
+    return Promise.reject(error);
+  }
+);
+
 // Auth API
 export const authAPI = {
   register: (userData: any) => api.post('/auth/register', userData),

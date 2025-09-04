@@ -20,9 +20,17 @@ const app = express();
 const PORT = config.port;
 
 // Middleware
-app.use(cors());
+const corsOptions = {
+  origin: process.env.CLIENT_URL || 'http://localhost:4321',
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true,
+  maxAge: 86400 // 24 hours in seconds
+};
+
+app.use(cors(corsOptions));
 app.use(express.json());
-app.use(morgan('dev'));
+app.use(morgan(config.nodeEnv === 'production' ? 'combined' : 'dev'));
 
 // Serve uploaded files statically
 app.use('/uploads', express.static('uploads'));
@@ -42,6 +50,16 @@ app.get('/', (req, res) => {
   res.json({ message: 'Welcome to LuxeBlog API' });
 });
 
+// Health check endpoint
+app.get('/api/health', (req, res) => {
+  res.status(200).json({ 
+    status: 'ok', 
+    timestamp: Date.now(),
+    environment: config.nodeEnv,
+    uptime: process.uptime()
+  });
+});
+
 // Connect to MongoDB Atlas and start server
 const startServer = async () => {
   try {
@@ -54,8 +72,10 @@ const startServer = async () => {
     // Start server after successful database connection
     app.listen(PORT, () => {
       console.log(`🚀 LuxeBlog Server running on port ${PORT}`);
-      console.log(`📡 API endpoints available at http://localhost:${PORT}/api`);
+      console.log(`📡 API endpoints available at ${config.nodeEnv === 'production' ? '' : `http://localhost:${PORT}`}/api`);
       console.log(`🗄️  Connected to MongoDB Atlas cluster: LuxeBlog`);
+      console.log(`🔒 Environment: ${config.nodeEnv}`);
+      console.log(`🌐 CORS allowed origin: ${corsOptions.origin}`);
     });
   } catch (error) {
     console.error('Failed to start server:', error);
@@ -67,11 +87,18 @@ startServer();
 
 // Error handling middleware
 app.use((err, req, res, next) => {
+  console.error('ERROR:', err.message);
   console.error(err.stack);
-  res.status(500).json({
+  
+  // Detailed error in development, sanitized in production
+  const errorResponse = {
     message: 'Something went wrong on the server',
-    error: process.env.NODE_ENV === 'development' ? err.message : {}
-  });
+    error: config.nodeEnv === 'production' 
+      ? { type: err.name || 'ServerError' }
+      : { type: err.name, details: err.message, path: req.path }
+  };
+  
+  res.status(err.statusCode || 500).json(errorResponse);
 });
 
 export default app;
