@@ -17,7 +17,8 @@ import uploadRoutes from './routes/upload.js';
 
 // Initialize express app
 const app = express();
-const PORT = config.port;
+// Directly use process.env.PORT for Render compatibility, fallback to 10000 for local development
+const PORT = process.env.PORT || 10000;
 
 // Middleware
 const corsOptions = {
@@ -71,8 +72,8 @@ const startServer = async () => {
     
     // Start server after successful database connection
     app.listen(PORT, () => {
-      console.log(`🚀 LuxeBlog Server running on port ${PORT}`);
-      console.log(`📡 API endpoints available at ${config.nodeEnv === 'production' ? '' : `http://localhost:${PORT}`}/api`);
+      console.log(`🚀 LuxeBlog Server running on port ${PORT} (from process.env.PORT)`);
+      console.log(`📡 API endpoints available at ${config.nodeEnv === 'production' ? 'https://your-app-url.onrender.com' : `http://localhost:${PORT}`}/api`);
       console.log(`🗄️  Connected to MongoDB Atlas cluster: LuxeBlog`);
       console.log(`🔒 Environment: ${config.nodeEnv}`);
       console.log(`🌐 CORS allowed origin: ${corsOptions.origin}`);
