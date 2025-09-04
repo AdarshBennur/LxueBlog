@@ -371,7 +371,7 @@ const allPosts = getAllPosts();
         console.log('🔄 Loading articles from API...');
         
         try {
-          const apiUrl = `${import.meta.env.PUBLIC_API_URL || 'http://localhost:3001/api'}/posts`;
+          const apiUrl = `${import.meta.env.PUBLIC_API_URL || 'http://localhost:10000/api'}/posts`;
           console.log(`📡 Fetching from: ${apiUrl}`);
           
           // Fetch articles from backend API
@@ -405,7 +405,7 @@ const allPosts = getAllPosts();
               author: article.author?.name || 'Unknown Author',
               authorAvatar: article.author?.avatar,
               image: article.featuredImage?.startsWith('/uploads/') 
-                ? `${import.meta.env.PUBLIC_API_URL || 'http://localhost:3001'}${article.featuredImage}`
+                ? `${import.meta.env.PUBLIC_API_URL || 'http://localhost:10000'}${article.featuredImage}`
                 : article.featuredImage,
               category: article.category?.name || article.category,
               slug: `/article?id=${article._id}`,
@@ -734,7 +734,7 @@ const allPosts = getAllPosts();
             const imageFormData = new FormData();
             imageFormData.append('image', selectedImage);
             
-            const imageResponse = await fetch(`${import.meta.env.PUBLIC_API_URL || 'http://localhost:3001/api'}/upload/image`, {
+            const imageResponse = await fetch(`${import.meta.env.PUBLIC_API_URL || 'http://localhost:10000/api'}/upload/image`, {
               method: 'POST',
               headers: {
                 'Authorization': `Bearer ${token}`
@@ -784,7 +784,7 @@ const allPosts = getAllPosts();
           
           if (isEditing) {
             // Update existing article
-            response = await fetch(`${import.meta.env.PUBLIC_API_URL || 'http://localhost:3001/api'}/posts/${articleId}`, {
+            response = await fetch(`${import.meta.env.PUBLIC_API_URL || 'http://localhost:10000/api'}/posts/${articleId}`, {
               method: 'PUT',
               headers: {
                 'Content-Type': 'application/json',
@@ -794,7 +794,7 @@ const allPosts = getAllPosts();
             });
           } else {
             // Create new article
-            response = await fetch(`${import.meta.env.PUBLIC_API_URL || 'http://localhost:3001/api'}/posts`, {
+            response = await fetch(`${import.meta.env.PUBLIC_API_URL || 'http://localhost:10000/api'}/posts`, {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json',
@@ -894,7 +894,7 @@ const allPosts = getAllPosts();
           }
           
           // Fetch article from API
-          const response = await fetch(`${import.meta.env.PUBLIC_API_URL || 'http://localhost:3001/api'}/posts/${articleId}`, {
+          const response = await fetch(`${import.meta.env.PUBLIC_API_URL || 'http://localhost:10000/api'}/posts/${articleId}`, {
             headers: {
               'Authorization': `Bearer ${token}`
             }
@@ -944,7 +944,7 @@ const allPosts = getAllPosts();
             // Set image source with proper URL
             let imageSrc = article.featuredImage;
             if (imageSrc.startsWith('/uploads/')) {
-              imageSrc = `${import.meta.env.PUBLIC_API_URL || 'http://localhost:3001'}${imageSrc}`;
+              imageSrc = `${import.meta.env.PUBLIC_API_URL || 'http://localhost:10000'}${imageSrc}`;
             }
             
             imagePreview.src = imageSrc;

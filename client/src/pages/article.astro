@@ -124,7 +124,7 @@ import CommentSection from '../components/CommentSection.astro';
         showSection('loadingSection');
         
         // Fetch article from API
-        const apiUrl = `${import.meta.env.PUBLIC_API_URL || 'http://localhost:3001/api'}/posts/${articleId}`;
+        const apiUrl = `${import.meta.env.PUBLIC_API_URL || 'http://localhost:10000/api'}/posts/${articleId}`;
         console.log(`📡 Fetching from: ${apiUrl}`);
         
         const response = await fetch(apiUrl);
@@ -220,7 +220,7 @@ import CommentSection from '../components/CommentSection.astro';
         // Handle different image sources
         let imageSrc = article.featuredImage;
         if (imageSrc.startsWith('/uploads/')) {
-          imageSrc = `${import.meta.env.PUBLIC_API_URL || 'http://localhost:3001'}${imageSrc}`;
+          imageSrc = `${import.meta.env.PUBLIC_API_URL || 'http://localhost:10000'}${imageSrc}`;
         }
         
         featuredImage.src = imageSrc;

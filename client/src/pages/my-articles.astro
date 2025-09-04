@@ -184,7 +184,7 @@ import MainLayout from '../layouts/MainLayout.astro';
         console.log('🔐 User token found, fetching user info...');
         
         // Get current user info to fetch their articles
-        const userApiUrl = `${import.meta.env.PUBLIC_API_URL || 'http://localhost:3001/api'}/auth/me`;
+        const userApiUrl = `${import.meta.env.PUBLIC_API_URL || 'http://localhost:10000/api'}/auth/me`;
         console.log(`📡 Fetching user info from: ${userApiUrl}`);
         
         const userResponse = await fetch(userApiUrl, {
@@ -205,7 +205,7 @@ import MainLayout from '../layouts/MainLayout.astro';
         console.log(`🆔 User ID: ${userId}`);
         
         // Fetch user's articles from API
-        const articlesApiUrl = `${import.meta.env.PUBLIC_API_URL || 'http://localhost:3001/api'}/posts/user/${userId}`;
+        const articlesApiUrl = `${import.meta.env.PUBLIC_API_URL || 'http://localhost:10000/api'}/posts/user/${userId}`;
         console.log(`📡 Fetching user articles from: ${articlesApiUrl}`);
         
         const response = await fetch(articlesApiUrl, {
@@ -235,7 +235,7 @@ import MainLayout from '../layouts/MainLayout.astro';
             excerpt: article.excerpt,
             content: article.content,
             image: article.featuredImage?.startsWith('/uploads/') 
-              ? `${import.meta.env.PUBLIC_API_URL || 'http://localhost:3001'}${article.featuredImage}`
+              ? `${import.meta.env.PUBLIC_API_URL || 'http://localhost:10000'}${article.featuredImage}`
               : article.featuredImage,
             category: article.category?.name || article.category,
             date: new Date(article.createdAt).toLocaleDateString('en-US', { 
@@ -659,7 +659,7 @@ import MainLayout from '../layouts/MainLayout.astro';
           }
           
           // Delete article via API
-          const response = await fetch(`${import.meta.env.PUBLIC_API_URL || 'http://localhost:3001/api'}/posts/${id}`, {
+          const response = await fetch(`${import.meta.env.PUBLIC_API_URL || 'http://localhost:10000/api'}/posts/${id}`, {
             method: 'DELETE',
             headers: {
               'Authorization': `Bearer ${token}`
