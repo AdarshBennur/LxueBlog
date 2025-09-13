@@ -1,29 +1,86 @@
 import axios from 'axios';
 
-// Environment-aware API URL configuration
+// RUTHLESS PRODUCTION-FIRST API URL CONFIGURATION
+// This configuration GUARANTEES no localhost references in production builds
 const getApiUrl = () => {
+  // ALWAYS check for production environment variable FIRST
   const envUrl = import.meta.env.PUBLIC_API_URL;
   
-  if (envUrl) {
-    // Production: use environment variable
-    return envUrl;
+  // Log configuration for debugging
+  console.log('🔧 API Configuration Debug:', {
+    envUrl,
+    isDev: import.meta.env.DEV,
+    mode: import.meta.env.MODE,
+    prod: import.meta.env.PROD
+  });
+  
+  // PRODUCTION: Environment variable must be set
+  if (envUrl && envUrl.trim()) {
+    console.log('✅ Using production API URL:', envUrl);
+    return envUrl.trim();
   }
   
-  // Development fallback - only use localhost in dev mode
-  if (import.meta.env.DEV) {
-    return 'http://localhost:10000/api';
+  // DEVELOPMENT: Only allow localhost if explicitly in dev mode
+  if (import.meta.env.DEV === true) {
+    const devUrl = 'http://localhost:10000/api';
+    console.log('🛠️ Using development API URL:', devUrl);
+    return devUrl;
   }
   
-  // Production fallback - must be explicitly set
-  throw new Error('PUBLIC_API_URL environment variable is required in production');
+  // FAIL FAST: No localhost allowed in production builds
+  console.error('❌ FATAL: No API URL configured for production');
+  console.error('❌ PUBLIC_API_URL environment variable is missing');
+  console.error('❌ Current environment:', {
+    envUrl,
+    DEV: import.meta.env.DEV,
+    PROD: import.meta.env.PROD,
+    MODE: import.meta.env.MODE
+  });
+  
+  // Throw detailed error to prevent silent failures
+  throw new Error(
+    `PRODUCTION BUILD ERROR: PUBLIC_API_URL environment variable is required. ` +
+    `Current value: "${envUrl}". This prevents localhost fallbacks in production.`
+  );
 };
 
-const API_URL = getApiUrl();
+// Initialize API URL with error handling
+let API_URL: string;
+try {
+  API_URL = getApiUrl();
+  console.log('🔧 API Module Initialized:', { API_URL });
+} catch (error) {
+  console.error('❌ FATAL: API Module Initialization Failed:', error);
+  throw error;
+}
 
 // Helper function to get the base API URL without the /api suffix
 export const getApiBaseUrl = () => {
   const url = getApiUrl();
   return url.endsWith('/api') ? url.slice(0, -4) : url;
+};
+
+// Diagnostic function to help debug API configuration issues
+export const debugApiConfiguration = () => {
+  const config = {
+    API_URL,
+    baseApiUrl: getApiBaseUrl(),
+    environment: {
+      PUBLIC_API_URL: import.meta.env.PUBLIC_API_URL,
+      DEV: import.meta.env.DEV,
+      PROD: import.meta.env.PROD,
+      MODE: import.meta.env.MODE,
+    },
+    timestamp: new Date().toISOString(),
+    userAgent: typeof navigator !== 'undefined' ? navigator.userAgent : 'Server-side',
+    location: typeof window !== 'undefined' ? window.location.href : 'Server-side'
+  };
+  
+  console.group('🔍 API Configuration Debug Report');
+  console.log('Configuration:', config);
+  console.groupEnd();
+  
+  return config;
 };
 
 // Create axios instance with base URL
@@ -35,16 +92,48 @@ const api = axios.create({
   }
 });
 
-// Add auth token to requests if available
+// Add auth token to requests if available + LOCALHOST PREVENTION
 api.interceptors.request.use(
   (config) => {
+    // CRITICAL: Detect and prevent localhost requests in production
+    const requestUrl = config.baseURL || '';
+    const fullUrl = `${requestUrl}${config.url || ''}`;
+    
+    console.log('🌐 Making API Request:', {
+      method: config.method?.toUpperCase(),
+      baseURL: config.baseURL,
+      url: config.url,
+      fullUrl,
+      headers: config.headers
+    });
+    
+    // FAIL FAST: Block localhost requests in production
+    if (fullUrl.includes('localhost') && import.meta.env.PROD) {
+      const error = new Error(
+        `BLOCKED: Localhost API request detected in production! URL: ${fullUrl}. ` +
+        `This indicates a configuration error. Expected: https://lxueblog.onrender.com/api`
+      );
+      console.error('🚫 PRODUCTION LOCALHOST BLOCK:', error);
+      throw error;
+    }
+    
+    // Warn about localhost in development
+    if (fullUrl.includes('localhost')) {
+      console.warn('⚠️ Development mode: Using localhost API:', fullUrl);
+    }
+    
+    // Add auth token
     const token = localStorage.getItem('token');
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
+    
     return config;
   },
-  (error) => Promise.reject(error)
+  (error) => {
+    console.error('🚫 Request Interceptor Error:', error);
+    return Promise.reject(error);
+  }
 );
 
 // Improve error handling for better debugging

@@ -154,10 +154,12 @@ import MainLayout from '../layouts/MainLayout.astro';
       };
       
       try {
-        // Import the centralized API module
-        const { authAPI } = await import('../lib/api.ts');
+        // Import the centralized API module and debug info
+        const { authAPI, debugApiConfiguration } = await import('../lib/api.ts');
         
-        console.log('Making login request via authAPI...');
+        console.log('🔍 LOGIN DEBUG: Starting authentication process');
+        debugApiConfiguration();
+        console.log('🔍 LOGIN DEBUG: Credentials:', { email: credentials.email, password: '***' });
         
         const response = await authAPI.login(credentials);
         const result = response.data;
