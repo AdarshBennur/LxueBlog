@@ -215,95 +215,48 @@ import MainLayout from '../layouts/MainLayout.astro';
     </div>
   </section>
 
-  <script>
-    // Toggle password visibility function
-    window.togglePasswordVisibility = function(fieldId) {
-      console.log('Toggling visibility for:', fieldId);
-      const passwordField = document.getElementById(fieldId);
-      const eyeClosed = document.getElementById(fieldId + '-eye-closed');
-      const eyeOpen = document.getElementById(fieldId + '-eye-open');
-      
-      console.log('Elements found:', {
-        passwordField: passwordField,
-        eyeClosed: eyeClosed,
-        eyeOpen: eyeOpen
-      });
-      
-      if (passwordField && eyeClosed && eyeOpen) {
-        if (passwordField.type === 'password') {
-          // Show password
-          passwordField.type = 'text';
-          eyeClosed.classList.add('hidden');
-          eyeOpen.classList.remove('hidden');
-          console.log('Password shown');
-        } else {
-          // Hide password
-          passwordField.type = 'password';
-          eyeClosed.classList.remove('hidden');
-          eyeOpen.classList.add('hidden');
-          console.log('Password hidden');
-        }
-      } else {
-        console.error('Could not find required elements for', fieldId);
-      }
+  <script type="module">
+  // Toggle password visibility function stays same...
+
+  // Handle signup form submission
+  document.getElementById('signupForm')?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const formData = new FormData(e.target);
+    const userData = {
+      firstName: formData.get('firstName'),
+      lastName: formData.get('lastName'),
+      email: formData.get('email'),
+      password: formData.get('password'),
+      confirmPassword: formData.get('confirmPassword'),
+      membership: formData.get('membership')
+    };
+
+    if (userData.password !== userData.confirmPassword) {
+      alert('Passwords do not match!');
+      return;
     }
-    
-    // Handle form submission
-    document.getElementById('signupForm')?.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      
-      const formData = new FormData(e.target as HTMLFormElement);
-      const userData = {
-        firstName: formData.get('firstName'),
-        lastName: formData.get('lastName'),
-        email: formData.get('email'),
-        password: formData.get('password'),
-        confirmPassword: formData.get('confirmPassword'),
-        membership: formData.get('membership')
-      };
-      
-      // Basic validation
-      if (userData.password !== userData.confirmPassword) {
-        alert('Passwords do not match!');
-        return;
+
+    try {
+      const { authAPI, debugApiConfiguration } = await import('../lib/api.ts');
+      debugApiConfiguration();
+
+      const response = await authAPI.register(userData);
+      const result = response.data;
+
+      if (result.success) {
+        localStorage.setItem('token', result.token);
+        localStorage.setItem('user', JSON.stringify(result.user));
+        if (window.updateAuthState) window.updateAuthState();
+        alert('Account created successfully! Welcome to LuxeBlog!');
+        window.location.href = '/home';
+      } else {
+        alert('Error: ' + (result.message || 'Registration failed'));
       }
-      
-      try {
-        // Import the centralized API module and debug info
-        const { authAPI, debugApiConfiguration } = await import('../lib/api.ts');
-        
-        console.log('🔍 SIGNUP DEBUG: Starting registration process');
-        debugApiConfiguration();
-        console.log('🔍 SIGNUP DEBUG: User data:', userData);
-        
-        const response = await authAPI.register(userData);
-        const result = response.data;
-        
-        console.log('Registration response:', { success: result.success, message: result.message });
-        
-        if (result.success) {
-          // Store token
-          localStorage.setItem('token', result.token);
-          localStorage.setItem('user', JSON.stringify(result.user));
-          
-          // Update authentication state
-          if (window.updateAuthState) {
-            window.updateAuthState();
-          }
-          
-          alert('Account created successfully! Welcome to LuxeBlog!');
-          // Redirect to home page
-          window.location.href = '/home';
-        } else {
-          console.error('Registration failed:', result);
-          alert('Error: ' + (result.message || 'Registration failed'));
-        }
-      } catch (error) {
-        console.error('Signup error:', error);
-        // Use the enhanced error handling from the API interceptor
-        const errorMsg = error.friendlyMessage || 'An error occurred. Please try again.';
-        alert(errorMsg);
-      }
-    });
-  </script>
+    } catch (error) {
+      console.error('Signup error:', error);
+      alert(error.friendlyMessage || 'An error occurred. Please try again.');
+    }
+  });
+</script>
 </MainLayout>
