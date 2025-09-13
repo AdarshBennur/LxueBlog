@@ -386,6 +386,9 @@ const allPosts = getAllPosts();
           let apiArticles = result.data || [];
           console.log(`📄 Raw articles from API: ${apiArticles.length}`);
           
+          // Import API helper for URL construction
+          const { getApiBaseUrl } = await import('../lib/api.ts');
+          
           // Transform API articles to match frontend format
           apiArticles = apiArticles.map(article => {
             console.log(`🔄 Processing article: ${article.title}`);
@@ -402,7 +405,7 @@ const allPosts = getAllPosts();
               author: article.author?.name || 'Unknown Author',
               authorAvatar: article.author?.avatar,
               image: article.featuredImage?.startsWith('/uploads/') 
-                ? `${(import.meta.env.PUBLIC_API_URL || 'http://localhost:10000/api').replace('/api', '')}${article.featuredImage}`
+                ? `${getApiBaseUrl()}${article.featuredImage}`
                 : article.featuredImage,
               category: article.category?.name || article.category,
               slug: `/article?id=${article._id}`,
@@ -866,7 +869,7 @@ const allPosts = getAllPosts();
           }
           
           // Fetch article from API using centralized API module
-          const { postsAPI } = await import('../lib/api.ts');
+          const { postsAPI, getApiBaseUrl } = await import('../lib/api.ts');
           let article;
           
           try {
@@ -919,7 +922,7 @@ const allPosts = getAllPosts();
             // Set image source with proper URL
             let imageSrc = article.featuredImage;
             if (imageSrc.startsWith('/uploads/')) {
-              imageSrc = `${(import.meta.env.PUBLIC_API_URL || 'http://localhost:10000/api').replace('/api', '')}${imageSrc}`;
+              imageSrc = `${getApiBaseUrl()}${imageSrc}`;
             }
             
             imagePreview.src = imageSrc;

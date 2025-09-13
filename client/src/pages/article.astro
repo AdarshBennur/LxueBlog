@@ -134,7 +134,7 @@ import CommentSection from '../components/CommentSection.astro';
         console.log('📦 Article loaded:', article.title);
         
         // Populate article content
-        populateArticle(article);
+        await populateArticle(article);
         
         // Update comment section with article ID
         updateCommentSection(articleId);
@@ -158,7 +158,9 @@ import CommentSection from '../components/CommentSection.astro';
       document.getElementById(sectionId).classList.remove('hidden');
     }
     
-    function populateArticle(article) {
+    async function populateArticle(article) {
+      // Import API helper for URL construction
+      const { getApiBaseUrl } = await import('../lib/api.ts');
       // Set title and meta
       document.title = `${article.title} | LuxeBlog`;
       document.getElementById('articleTitle').textContent = article.title;
@@ -213,7 +215,7 @@ import CommentSection from '../components/CommentSection.astro';
         // Handle different image sources
         let imageSrc = article.featuredImage;
         if (imageSrc.startsWith('/uploads/')) {
-          imageSrc = `${(import.meta.env.PUBLIC_API_URL || 'http://localhost:10000/api').replace('/api', '')}${imageSrc}`;
+          imageSrc = `${getApiBaseUrl()}${imageSrc}`;
         }
         
         featuredImage.src = imageSrc;

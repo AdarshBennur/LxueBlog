@@ -205,6 +205,9 @@ import MainLayout from '../layouts/MainLayout.astro';
         const apiArticles = result.data || [];
         console.log(`📄 Raw user articles from API: ${apiArticles.length}`);
         
+        // Import API helper for URL construction
+        const { getApiBaseUrl } = await import('../lib/api.ts');
+        
         // Transform API articles to match frontend format
         articles = apiArticles.map(article => {
           console.log(`🔄 Processing user article: ${article.title}`);
@@ -214,7 +217,7 @@ import MainLayout from '../layouts/MainLayout.astro';
             excerpt: article.excerpt,
             content: article.content,
             image: article.featuredImage?.startsWith('/uploads/') 
-              ? `${(import.meta.env.PUBLIC_API_URL || 'http://localhost:10000/api').replace('/api', '')}${article.featuredImage}`
+              ? `${getApiBaseUrl()}${article.featuredImage}`
               : article.featuredImage,
             category: article.category?.name || article.category,
             date: new Date(article.createdAt).toLocaleDateString('en-US', { 

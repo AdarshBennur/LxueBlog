@@ -1,10 +1,28 @@
 import axios from 'axios';
 
-const API_URL = import.meta.env.PUBLIC_API_URL || 'http://localhost:10000/api';
+// Environment-aware API URL configuration
+const getApiUrl = () => {
+  const envUrl = import.meta.env.PUBLIC_API_URL;
+  
+  if (envUrl) {
+    // Production: use environment variable
+    return envUrl;
+  }
+  
+  // Development fallback - only use localhost in dev mode
+  if (import.meta.env.DEV) {
+    return 'http://localhost:10000/api';
+  }
+  
+  // Production fallback - must be explicitly set
+  throw new Error('PUBLIC_API_URL environment variable is required in production');
+};
+
+const API_URL = getApiUrl();
 
 // Helper function to get the base API URL without the /api suffix
 export const getApiBaseUrl = () => {
-  const url = import.meta.env.PUBLIC_API_URL || 'http://localhost:10000/api';
+  const url = getApiUrl();
   return url.endsWith('/api') ? url.slice(0, -4) : url;
 };
 
