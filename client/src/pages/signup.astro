@@ -269,20 +269,15 @@ import MainLayout from '../layouts/MainLayout.astro';
       }
       
       try {
-        // Use the proper API base URL from environment
-        const API_URL = import.meta.env.PUBLIC_API_URL || 'http://localhost:10000/api';
-        console.log('Making registration request to:', `${API_URL}/auth/register`);
+        // Import the centralized API module
+        const { authAPI } = await import('../lib/api.ts');
         
-        const response = await fetch(`${API_URL}/auth/register`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(userData)
-        });
+        console.log('Making registration request via authAPI...');
         
-        const result = await response.json();
-        console.log('Registration response:', { status: response.status, success: result.success, message: result.message });
+        const response = await authAPI.register(userData);
+        const result = response.data;
+        
+        console.log('Registration response:', { success: result.success, message: result.message });
         
         if (result.success) {
           // Store token
@@ -303,10 +298,8 @@ import MainLayout from '../layouts/MainLayout.astro';
         }
       } catch (error) {
         console.error('Signup error:', error);
-        // Show more detailed error information
-        const errorMsg = error.message.includes('fetch') 
-          ? 'Unable to connect to server. Please check your internet connection.' 
-          : 'An error occurred. Please try again.';
+        // Use the enhanced error handling from the API interceptor
+        const errorMsg = error.friendlyMessage || 'An error occurred. Please try again.';
         alert(errorMsg);
       }
     });

@@ -731,28 +731,18 @@ const allPosts = getAllPosts();
           
           // Upload image if selected
           if (selectedImage && typeof selectedImage === 'object') {
-            const imageFormData = new FormData();
-            imageFormData.append('image', selectedImage);
+            const { uploadAPI } = await import('../lib/api.ts');
             
-            const imageResponse = await fetch(`${import.meta.env.PUBLIC_API_URL || 'http://localhost:10000/api'}/upload/image`, {
-              method: 'POST',
-              headers: {
-                'Authorization': `Bearer ${token}`
-              },
-              body: imageFormData
-            });
-            
-            if (imageResponse.ok) {
-              const imageResult = await imageResponse.json();
-              featuredImageUrl = imageResult.data.url;
-            } else {
-              const imageError = await imageResponse.json();
-              if (imageResponse.status === 401) {
+            try {
+              const imageResponse = await uploadAPI.uploadImage(selectedImage);
+              featuredImageUrl = imageResponse.data.data.url;
+            } catch (error) {
+              if (error.response?.status === 401) {
                 throw new Error('Please log in to upload images');
-              } else if (imageResponse.status === 413) {
+              } else if (error.response?.status === 413) {
                 throw new Error('Image file is too large. Maximum size is 2MB.');
               } else {
-                throw new Error(imageError.message || 'Failed to upload image');
+                throw new Error(error.response?.data?.message || error.friendlyMessage || 'Failed to upload image');
               }
             }
           }
@@ -780,40 +770,25 @@ const allPosts = getAllPosts();
             articleData.featuredImage = featuredImageUrl;
           }
           
+          const { postsAPI } = await import('../lib/api.ts');
           let response;
           
-          if (isEditing) {
-            // Update existing article
-            response = await fetch(`${import.meta.env.PUBLIC_API_URL || 'http://localhost:10000/api'}/posts/${articleId}`, {
-              method: 'PUT',
-              headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
-              },
-              body: JSON.stringify(articleData)
-            });
-          } else {
-            // Create new article
-            response = await fetch(`${import.meta.env.PUBLIC_API_URL || 'http://localhost:10000/api'}/posts`, {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
-              },
-              body: JSON.stringify(articleData)
-            });
-          }
-          
-          if (!response.ok) {
-            const errorResult = await response.json();
-            
-            // Handle specific error types
-            if (response.status === 401) {
+          try {
+            if (isEditing) {
+              // Update existing article
+              response = await postsAPI.updatePost(articleId, articleData);
+            } else {
+              // Create new article
+              response = await postsAPI.createPost(articleData);
+            }
+          } catch (error) {
+            // Handle specific error types using axios error structure
+            if (error.response?.status === 401) {
               throw new Error('Please log in to post articles');
-            } else if (response.status === 403) {
+            } else if (error.response?.status === 403) {
               throw new Error('You do not have permission to post articles. Please contact support.');
             } else {
-              throw new Error(errorResult.message || 'Failed to save article');
+              throw new Error(error.response?.data?.message || error.friendlyMessage || 'Failed to save article');
             }
           }
           
@@ -893,19 +868,22 @@ const allPosts = getAllPosts();
             return;
           }
           
-          // Fetch article from API
-          const response = await fetch(`${import.meta.env.PUBLIC_API_URL || 'http://localhost:10000/api'}/posts/${articleId}`, {
-            headers: {
-              'Authorization': `Bearer ${token}`
+          // Fetch article from API using centralized API module
+          const { postsAPI } = await import('../lib/api.ts');
+          let article;
+          
+          try {
+            const response = await postsAPI.getPost(articleId);
+            article = response.data.data;
+          } catch (error) {
+            if (error.response?.status === 404) {
+              throw new Error('Article not found');
+            } else if (error.response?.status === 403) {
+              throw new Error('Access denied');
+            } else {
+              throw new Error(error.friendlyMessage || 'Article not found or access denied');
             }
-          });
-          
-          if (!response.ok) {
-            throw new Error('Article not found or access denied');
           }
-          
-          const result = await response.json();
-          const article = result.data;
           
           // Update modal title
           const modalTitle = document.querySelector('#postArticleModal h3');

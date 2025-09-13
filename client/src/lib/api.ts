@@ -121,6 +121,19 @@ export const newsletterAPI = {
   getSubscribers: () => api.get('/newsletter')
 };
 
+// Upload API
+export const uploadAPI = {
+  uploadImage: (imageFile: File) => {
+    const formData = new FormData();
+    formData.append('image', imageFile);
+    return api.post('/upload/image', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    });
+  }
+};
+
 export default {
   auth: authAPI,
   posts: postsAPI,
@@ -128,5 +141,6 @@ export default {
   categories: categoriesAPI,
   tags: tagsAPI,
   users: usersAPI,
-  newsletter: newsletterAPI
+  newsletter: newsletterAPI,
+  upload: uploadAPI
 };

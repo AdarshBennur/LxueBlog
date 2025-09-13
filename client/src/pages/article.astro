@@ -123,19 +123,12 @@ import CommentSection from '../components/CommentSection.astro';
         // Show loading state
         showSection('loadingSection');
         
-        // Fetch article from API
-        const apiUrl = `${import.meta.env.PUBLIC_API_URL || 'http://localhost:10000/api'}/posts/${articleId}`;
-        console.log(`📡 Fetching from: ${apiUrl}`);
+        // Fetch article from API using centralized API module
+        const { postsAPI } = await import('../lib/api.ts');
+        console.log(`📡 Fetching article with ID: ${articleId}`);
         
-        const response = await fetch(apiUrl);
-        
-        console.log(`📊 Response status: ${response.status} ${response.statusText}`);
-        
-        if (!response.ok) {
-          throw new Error('Article not found');
-        }
-        
-        const result = await response.json();
+        const response = await postsAPI.getPost(articleId);
+        const result = response.data;
         const article = result.data;
         
         console.log('📦 Article loaded:', article.title);

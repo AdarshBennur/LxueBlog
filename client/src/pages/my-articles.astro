@@ -658,26 +658,21 @@ import MainLayout from '../layouts/MainLayout.astro';
             return;
           }
           
-          // Delete article via API
-          const response = await fetch(`${import.meta.env.PUBLIC_API_URL || 'http://localhost:10000/api'}/posts/${id}`, {
-            method: 'DELETE',
-            headers: {
-              'Authorization': `Bearer ${token}`
-            }
-          });
+          // Delete article via API using centralized API module
+          const { postsAPI } = await import('../lib/api.ts');
           
-          if (!response.ok) {
-            const errorResult = await response.json();
-            
-            // Handle specific error types
-            if (response.status === 401) {
+          try {
+            await postsAPI.deletePost(id);
+          } catch (error) {
+            // Handle specific error types using axios error structure
+            if (error.response?.status === 401) {
               throw new Error('Please log in to delete articles');
-            } else if (response.status === 403) {
+            } else if (error.response?.status === 403) {
               throw new Error('You can only delete your own articles');
-            } else if (response.status === 404) {
+            } else if (error.response?.status === 404) {
               throw new Error('Article not found');
             } else {
-              throw new Error(errorResult.message || 'Failed to delete article');
+              throw new Error(error.response?.data?.message || error.friendlyMessage || 'Failed to delete article');
             }
           }
           
