@@ -2,6 +2,12 @@ import axios from 'axios';
 
 const API_URL = import.meta.env.PUBLIC_API_URL || 'http://localhost:10000/api';
 
+// Helper function to get the base API URL without the /api suffix
+export const getApiBaseUrl = () => {
+  const url = import.meta.env.PUBLIC_API_URL || 'http://localhost:10000/api';
+  return url.endsWith('/api') ? url.slice(0, -4) : url;
+};
+
 // Create axios instance with base URL
 const api = axios.create({
   baseURL: API_URL,
@@ -70,6 +76,7 @@ export const postsAPI = {
   getPosts: (params?: any) => api.get('/posts', { params }),
   getPost: (id: string) => api.get(`/posts/${id}`),
   getPostBySlug: (slug: string) => api.get(`/posts/slug/${slug}`),
+  getUserPosts: (userId: string) => api.get(`/posts/user/${userId}`),
   createPost: (postData: any) => api.post('/posts', postData),
   updatePost: (id: string, postData: any) => api.put(`/posts/${id}`, postData),
   deletePost: (id: string) => api.delete(`/posts/${id}`)

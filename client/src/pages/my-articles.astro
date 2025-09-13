@@ -183,44 +183,23 @@ import MainLayout from '../layouts/MainLayout.astro';
         
         console.log('🔐 User token found, fetching user info...');
         
-        // Get current user info to fetch their articles
-        const userApiUrl = `${import.meta.env.PUBLIC_API_URL || 'http://localhost:10000/api'}/auth/me`;
-        console.log(`📡 Fetching user info from: ${userApiUrl}`);
+        // Get current user info using centralized API
+        const { authAPI } = await import('../lib/api.ts');
+        console.log('📡 Fetching user info via authAPI...');
         
-        const userResponse = await fetch(userApiUrl, {
-          headers: {
-            'Authorization': `Bearer ${token}`
-          }
-        });
+        const userResponse = await authAPI.getMe();
+        const userResult = userResponse.data;
         
-        console.log(`📊 User response status: ${userResponse.status} ${userResponse.statusText}`);
-        
-        if (!userResponse.ok) {
-          throw new Error('Failed to get user information');
-        }
-        
-        const userResult = await userResponse.json();
         console.log('👤 User info:', userResult);
         const userId = userResult.data._id;
         console.log(`🆔 User ID: ${userId}`);
         
-        // Fetch user's articles from API
-        const articlesApiUrl = `${import.meta.env.PUBLIC_API_URL || 'http://localhost:10000/api'}/posts/user/${userId}`;
-        console.log(`📡 Fetching user articles from: ${articlesApiUrl}`);
+        // Fetch user's articles using centralized API
+        const { postsAPI } = await import('../lib/api.ts');
+        console.log(`📡 Fetching user articles via postsAPI for user: ${userId}`);
         
-        const response = await fetch(articlesApiUrl, {
-          headers: {
-            'Authorization': `Bearer ${token}`
-          }
-        });
-        
-        console.log(`📊 Articles response status: ${response.status} ${response.statusText}`);
-        
-        if (!response.ok) {
-          throw new Error('Failed to fetch user articles');
-        }
-        
-        const result = await response.json();
+        const response = await postsAPI.getUserPosts(userId);
+        const result = response.data;
         console.log('📦 User articles API response:', result);
         
         const apiArticles = result.data || [];
@@ -235,7 +214,7 @@ import MainLayout from '../layouts/MainLayout.astro';
             excerpt: article.excerpt,
             content: article.content,
             image: article.featuredImage?.startsWith('/uploads/') 
-              ? `${import.meta.env.PUBLIC_API_URL || 'http://localhost:10000'}${article.featuredImage}`
+              ? `${(import.meta.env.PUBLIC_API_URL || 'http://localhost:10000/api').replace('/api', '')}${article.featuredImage}`
               : article.featuredImage,
             category: article.category?.name || article.category,
             date: new Date(article.createdAt).toLocaleDateString('en-US', { 

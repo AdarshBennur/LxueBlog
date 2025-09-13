@@ -371,19 +371,16 @@ const allPosts = getAllPosts();
         console.log('🔄 Loading articles from API...');
         
         try {
-          const apiUrl = `${import.meta.env.PUBLIC_API_URL || 'http://localhost:10000/api'}/posts`;
-          console.log(`📡 Fetching from: ${apiUrl}`);
+          // Import centralized API module
+          const { postsAPI } = await import('../lib/api.ts');
+          console.log('📡 Fetching articles via postsAPI...');
           
-          // Fetch articles from backend API
-          const response = await fetch(apiUrl);
+          // Fetch articles from backend API using centralized module
+          const response = await postsAPI.getPosts();
           
-          console.log(`📊 Response status: ${response.status} ${response.statusText}`);
+          console.log(`📊 Response status: ${response.status}`);
           
-          if (!response.ok) {
-            throw new Error(`HTTP ${response.status}: Failed to fetch articles`);
-          }
-          
-          const result = await response.json();
+          const result = response.data;
           console.log('📦 API Response:', result);
           
           let apiArticles = result.data || [];
@@ -405,7 +402,7 @@ const allPosts = getAllPosts();
               author: article.author?.name || 'Unknown Author',
               authorAvatar: article.author?.avatar,
               image: article.featuredImage?.startsWith('/uploads/') 
-                ? `${import.meta.env.PUBLIC_API_URL || 'http://localhost:10000'}${article.featuredImage}`
+                ? `${(import.meta.env.PUBLIC_API_URL || 'http://localhost:10000/api').replace('/api', '')}${article.featuredImage}`
                 : article.featuredImage,
               category: article.category?.name || article.category,
               slug: `/article?id=${article._id}`,
@@ -922,7 +919,7 @@ const allPosts = getAllPosts();
             // Set image source with proper URL
             let imageSrc = article.featuredImage;
             if (imageSrc.startsWith('/uploads/')) {
-              imageSrc = `${import.meta.env.PUBLIC_API_URL || 'http://localhost:10000'}${imageSrc}`;
+              imageSrc = `${(import.meta.env.PUBLIC_API_URL || 'http://localhost:10000/api').replace('/api', '')}${imageSrc}`;
             }
             
             imagePreview.src = imageSrc;

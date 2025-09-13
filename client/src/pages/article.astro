@@ -213,7 +213,7 @@ import CommentSection from '../components/CommentSection.astro';
         // Handle different image sources
         let imageSrc = article.featuredImage;
         if (imageSrc.startsWith('/uploads/')) {
-          imageSrc = `${import.meta.env.PUBLIC_API_URL || 'http://localhost:10000'}${imageSrc}`;
+          imageSrc = `${(import.meta.env.PUBLIC_API_URL || 'http://localhost:10000/api').replace('/api', '')}${imageSrc}`;
         }
         
         featuredImage.src = imageSrc;
